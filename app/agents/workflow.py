@@ -62,9 +62,12 @@ def should_continue(state: WorkflowState) -> Literal["tools", "analyzer"]:
 
 # ==================== 创建工作流 ====================
 
-def create_workflow() -> StateGraph:
+def create_workflow():
     """
     创建主工作流 (一个 Graph, 包含工具调用循环)
+    
+    Returns:
+        CompiledStateGraph: 编译后的 LangGraph 工作流
 
     流程:
     START -> extractor -> analyzer -> [should_continue?]
