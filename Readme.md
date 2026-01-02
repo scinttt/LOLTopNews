@@ -47,7 +47,7 @@ cp .env.example .env
 # Edit .env and add your DEEPSEEK_API_KEY
 
 # 4. Run analysis
-python app/main.py --file data/sample_patch_14.24.txt
+python app/main.py --version latest
 ```
 
 ## 📦 Installation
