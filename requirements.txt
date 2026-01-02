@@ -1,0 +1,22 @@
+# Core dependencies
+python-dotenv==1.0.0
+
+# LangChain & LangGraph
+langgraph>=0.0.20
+langchain>=0.1.0
+langchain-openai>=0.0.5
+langchain-community>=0.0.16
+
+# LLM Providers
+openai==1.10.0
+
+# WebSearch
+tavily-python>=0.3.0
+
+# Crawlers
+aiohttp==3.9.1
+beautifulsoup4==4.12.3
+lxml==5.1.0
+
+# Utilities
+httpx==0.26.0
