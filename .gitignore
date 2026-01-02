@@ -32,3 +32,9 @@ data/raw_patches/
 # OS
 .DS_Store
 Thumbs.db
+
+#documentation
+ARCHITECTURE.md
+DAY1_DAY2_SUMMARY.md
+DAY3_EXTRACTOR_COMPLETE.md
+PROJECT_STATUS.md
