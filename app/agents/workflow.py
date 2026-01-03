@@ -24,9 +24,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-from agents.llm import create_llm
-
-
 # ==================== Node 2: Tool Node ====================
 
 # 使用 LangGraph 内置的 ToolNode
@@ -36,28 +33,28 @@ tool_node = ToolNode(tools)
 
 # ==================== 条件路由 ====================
 
-def should_continue(state: WorkflowState) -> Literal["tools", "analyzer"]:
-    """决定是否继续调用工具还是进入 Analyzer"""
+def should_continue(state: WorkflowState) -> Literal["tools", "summarizer"]:
+    """决定 analyzer 是否继续调用工具还是进入 summarizer"""
 
     messages = state["messages"]
     last_message = messages[-1]
 
     # 检查工具调用次数（防止无限循环）
-    MAX_TOOL_CALLS = 3
+    MAX_TOOL_CALLS = 10
     tool_call_count = state.get("tool_call_count", 0)
 
     if tool_call_count >= MAX_TOOL_CALLS:
-        logger.warning(f"⚠️ 已达到最大工具调用次数 ({MAX_TOOL_CALLS})，强制进入 analyzer")
-        return "analyzer"
+        logger.warning(f"⚠️ 已达到最大工具调用次数 ({MAX_TOOL_CALLS})，强制进入 summarizer")
+        return "summarizer"
 
     # 如果最后一条消息包含工具调用，进入 tool_node
     if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
-        logger.info(f"→ 路由到: tools (LLM 请求调用工具，当前次数: {tool_call_count + 1}/{MAX_TOOL_CALLS})")
+        logger.info(f"→ 路由到: tools (Analyzer 请求调用工具，当前次数: {tool_call_count + 1}/{MAX_TOOL_CALLS})")
         return "tools"
 
-    # 否则，进入 analyzer
-    logger.info("→ 路由到: analyzer (无需调用工具)")
-    return "analyzer"
+    # 否则，进入 summarizer
+    logger.info("→ 路由到: summarizer (Analyzer 分析完成)")
+    return "summarizer"
 
 
 # ==================== 创建工作流 ====================
@@ -92,8 +89,20 @@ def create_workflow():
     # extractor 后直接进入 analyzer
     workflow.add_edge("extractor", "analyzer")
 
-    # 正常流程
-    workflow.add_edge("analyzer", "summarizer")
+    # analyzer 的条件路由：可能调用工具或进入 summarizer
+    workflow.add_conditional_edges(
+        "analyzer",
+        should_continue,
+        {
+            "tools": "tools",
+            "summarizer": "summarizer"
+        }
+    )
+
+    # 工具调用后循环回 analyzer
+    workflow.add_edge("tools", "analyzer")
+
+    # summarizer 结束
     workflow.add_edge("summarizer", END)
 
     # 编译

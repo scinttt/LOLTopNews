@@ -5,7 +5,7 @@ import re
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.state import WorkflowState
-from agents.llm import create_llm
+from agents.llm import extractor_llm
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ Example: If you see "剑姬 Q技能调整" but no specifics, search for "剑姬 
             messages = [system_msg, user_msg]
 
         # 2. 调用 LLM
-        model_with_tools = create_llm(temperature=0.3, bind_tools=False)
+        model_with_tools = extractor_llm(temperature=0.3, bind_tools=False)
 
         logger.info("调用 LLM 提取...")
         response = await model_with_tools.ainvoke(messages)
