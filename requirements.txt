@@ -1,6 +1,10 @@
 # Core dependencies
 python-dotenv==1.0.0
 
+# FastAPI
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
 # LangChain & LangGraph
 langgraph>=0.0.20
 langchain>=0.1.0
