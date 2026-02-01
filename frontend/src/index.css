@@ -1,0 +1,196 @@
+/* Import Font */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+:root {
+  --font-family-sans: 'Cinzel', serif;
+  --background-color: #010a13;
+  --text-color: #c4b998;
+  --header-color: #f0e6d2;
+  --border-color: #5b462a;
+  --accent-color-blue: #0ac8b9;
+  --accent-color-gold: #c89b3c;
+  --card-background: #091428;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #061e3a;
+  padding: 20px;
+  border-bottom: 2px solid var(--accent-color-gold);
+}
+
+h1, h2, h3 {
+  font-family: 'Cinzel', serif;
+  color: var(--header-color);
+  text-transform: uppercase;
+}
+
+main {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+div[class*="component-"] {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  text-align: left;
+}
+
+/* ChampionChanges Styles */
+.changes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.change-item {
+    background-color: #010a13;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.change-symbol {
+    font-size: 1.5em;
+}
+
+.change-name {
+    font-weight: bold;
+    color: var(--header-color);
+    flex-grow: 1;
+}
+
+.change-relevance {
+    background-color: var(--border-color);
+    color: var(--header-color);
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+}
+
+
+/* TierList Styles */
+.tiers-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tier-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.tier-label {
+  flex-shrink: 0;
+  width: 50px;
+  font-size: 2em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.tier-s { background-color: #ff7f7f; }
+.tier-a { background-color: #ffbf7f; }
+.tier-b { background-color: #ffff7f; }
+.tier-c { background-color: #bfff7f; }
+.tier-d { background-color: #7fbf7f; }
+
+.tier-champions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.champion-card {
+  background-color: #010a13;
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.champion-name {
+  font-weight: bold;
+  color: var(--accent-color-gold);
+}
+
+.champion-reason {
+  font-size: 0.9em;
+  color: #a09476;
+}
+
+.no-champions {
+  color: #a09476;
+  align-self: center;
+}
+
+/* ImpactAnalysis Styles */
+.analysis-card {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.analysis-card:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.analysis-section h4 {
+  color: var(--accent-color-gold);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 5px;
+}
+
+.analysis-section p {
+  margin: 5px 0;
+}
+
+.assessment-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.strength-score {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--accent-color-blue);
+}
+
+.reasoning {
+    background-color: #010a13;
+    border-left: 3px solid var(--accent-color-gold);
+    padding: 10px;
+  margin-top: 10px;
+  font-style: italic;
+}
+
