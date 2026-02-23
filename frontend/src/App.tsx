@@ -32,9 +32,20 @@ const App: React.FC = () => {
     loadData(version);
   }, []);
 
+  // Validate version format before submitting: accept "latest" or "X.Y" / "X.YY"
+  const isVersionInputValid = (input: string): boolean => {
+    const trimmed = input.trim();
+    return trimmed === 'latest' || /^\d+\.\d+$/.test(trimmed);
+  };
+
   // 重新分析
   const handleAnalyze = () => {
-    loadData(version);
+    const trimmedVersion = version.trim();
+    if (!isVersionInputValid(trimmedVersion)) {
+      setError('版本号格式错误，请输入 "latest" 或如 "26.3"、"15.24" 格式的版本号');
+      return;
+    }
+    loadData(trimmedVersion);
   };
 
   return (
@@ -45,9 +56,15 @@ const App: React.FC = () => {
           <input
             type="text"
             value={version}
-            onChange={(e) => setVersion(e.target.value)}
-            placeholder="输入版本号 (如 14.24 或 latest)"
-            style={{ padding: '0.5rem', fontSize: '1rem', minWidth: '200px' }}
+            onChange={(e) => { setVersion(e.target.value); setError(null); }}
+            onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
+            placeholder="输入版本号 (如 26.3 或 latest)"
+            style={{
+              padding: '0.5rem',
+              fontSize: '1rem',
+              minWidth: '200px',
+              borderColor: version && !isVersionInputValid(version) ? 'red' : undefined,
+            }}
           />
           <button
             onClick={handleAnalyze}
