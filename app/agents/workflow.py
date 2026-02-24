@@ -3,12 +3,10 @@ LOL Top Lane Guide - 主工作流
 一个 LangGraph，包含 3 个 Node: Extractor, Analyzer, Summarizer
 支持 WebSearch 工具调用
 """
-import os
 import logging
 from typing import Dict, Any, Literal
 from dotenv import load_dotenv
 
-from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
 
@@ -22,6 +20,7 @@ from agents.nodes.summarizer import summarizer_node
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+MAX_TOOL_CALLS = 10
 
 
 # ==================== Node 2: Tool Node ====================
@@ -39,8 +38,6 @@ def should_continue(state: WorkflowState) -> Literal["tools", "summarizer"]:
     messages = state["messages"]
     last_message = messages[-1]
 
-    # 检查工具调用次数（防止无限循环）
-    MAX_TOOL_CALLS = 10
     tool_call_count = state.get("tool_call_count", 0)
 
     if tool_call_count >= MAX_TOOL_CALLS:
@@ -55,6 +52,21 @@ def should_continue(state: WorkflowState) -> Literal["tools", "summarizer"]:
     # 否则，进入 summarizer
     logger.info("→ 路由到: summarizer (Analyzer 分析完成)")
     return "summarizer"
+
+
+def build_initial_state(raw_content: str, version: str) -> WorkflowState:
+    """Build a fresh workflow state for each execution."""
+    return {
+        "raw_content": raw_content,
+        "version": version,
+        "top_lane_changes": None,
+        "impact_analyses": None,
+        "summary_report": None,
+        "messages": [],
+        "error": None,
+        "metadata": {},
+        "tool_call_count": 0,
+    }
 
 
 # ==================== 创建工作流 ====================
@@ -126,17 +138,7 @@ async def run_workflow(raw_content: str, version: str = "unknown") -> Dict[str, 
     graph = create_workflow()
 
     # 初始状态
-    initial_state: WorkflowState = {
-        "raw_content": raw_content,
-        "version": version,
-        "top_lane_changes": None,
-        "impact_analyses": None,
-        "summary_report": None,
-        "messages": [],
-        "error": None,
-        "metadata": {},
-        "tool_call_count": 0  # 初始化工具调用计数器
-    }
+    initial_state = build_initial_state(raw_content, version)
 
     # 执行
     result = await graph.ainvoke(initial_state)

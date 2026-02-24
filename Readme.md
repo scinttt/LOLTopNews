@@ -1,283 +1,280 @@
-# LOL Top Lane Guide 🎮
+# LOL Top Lane Guide
 
-> AI-powered League of Legends patch analysis tool focused on top lane meta
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="Python 3.12+">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/Status-Active-green.svg" alt="Status: Active">
+  <img src="https://img.shields.io/badge/Type-Full--Stack-purple.svg" alt="Type: Full Stack">
+</p>
 
-Automatically analyze LOL patch notes and generate comprehensive top lane impact reports using AI. Built with LangGraph, DeepSeek LLM, and intelligent web scraping.
+> AI-powered League of Legends patch analysis tool focused on top lane meta. Automatically analyze LOL patch notes and generate comprehensive top lane impact reports using AI. Built with LangGraph, DeepSeek LLM, and intelligent web scraping.
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status: Beta](https://img.shields.io/badge/status-beta-orange.svg)]()
+## Features
 
-## 🌟 Features
+- **Intelligent Analysis**: Uses DeepSeek AI to extract and analyze top lane changes
+- **Cost-Effective**: ~¥0.03 per version analysis (100x cheaper than GPT-4)
+- **Top Lane Focused**: Filters out irrelevant changes (mid, ADC, jungle, support)
+- **Automated Scraping**: Directly fetches latest patch notes from LOL official website
+- **Structured Output**: Clean, categorized changes (champions, items, systems)
+- **REST API**: FastAPI-based API for programmatic access
+- **Web UI**: React-based frontend for visualization
 
-- **🤖 Intelligent Analysis**: Uses DeepSeek AI to extract and analyze top lane changes
-- **⚡ Fast & Cost-Effective**: ~¥0.03 per version analysis (100x cheaper than GPT-4)
-- **🎯 Top Lane Focused**: Filters out irrelevant changes (mid, ADC, jungle, support)
-- **🔄 Automated Scraping**: Directly fetches latest patch notes from LOL official website
-- **📊 Structured Output**: Clean, categorized changes (champions, items, systems)
-- **🚀 Parallel Processing**: Analyzes multiple champions simultaneously (coming soon)
+## Architecture
 
-## 📋 Table of Contents
-
-- [Quick Start](#-quick-start)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Examples](#-examples)
-- [Configuration](#️-configuration)
-- [Project Structure](#-project-structure)
-- [Development](#-development)
-- [FAQ](#-faq)
-- [Contributing](#-contributing)
-- [License](#-license)
-
-## 🚀 Quick Start
-
-```bash
-# 1. Clone the repository
-git clone <your-repo-url>
-cd LOLTopNews
-
-# 2. Install dependencies
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-# 3. Configure API keys
-cp .env.example .env
-# Edit .env and add your DEEPSEEK_API_KEY
-
-# 4. Run analysis
-python app/main.py --version latest
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Architecture                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌────────────────┐                                        │
+│  │ Crawler Module │ (Web Scraping)                          │
+│  │ lol_official.py│                                        │
+│  └───────┬────────┘                                        │
+│          │                                                  │
+│          ▼                                                  │
+│  ┌──────────────────────────────────────┐                  │
+│  │       LangGraph Workflow             │                  │
+│  ├──────────────────────────────────────┤                  │
+│  │  Node 1: Extractor                   │                  │
+│  │  - Extract top lane changes          │                  │
+│  │  - Champion/Item/System categories  │                  │
+│  └───────────┬──────────────────────────┘                  │
+│              │                                              │
+│              ▼                                              │
+│  ┌──────────────────────────────────────┐                  │
+│  │  Node 2: Analyzer                    │                  │
+│  │  - Deep impact analysis              │                  │
+│  │  - WebSearch tool integration        │                  │
+│  └───────────┬──────────────────────────┘                  │
+│              │                                              │
+│              ▼                                              │
+│  ┌──────────────────────────────────────┐                  │
+│  │  Node 3: Summarizer                  │                  │
+│  │  - Tier list generation              │                  │
+│  │  - Build recommendations             │                  │
+│  │  - Counter matrix                   │                  │
+│  └──────────────────────────────────────┘                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## 📦 Installation
+## Quick Start
 
 ### Prerequisites
 
-- Python 3.12 or higher
+- Python 3.12+
+- Node.js 18+ (for frontend)
 - DeepSeek API key ([Get one here](https://platform.deepseek.com))
-- (Optional) Tavily API key for enhanced search
 
-### Step-by-Step
-
-1. **Create virtual environment**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` and add:
-   ```env
-   DEEPSEEK_API_KEY=sk-your-key-here
-   TAVILY_API_KEY=tvly-your-key-here  # Optional
-   ```
-
-4. **Verify installation**
-   ```bash
-   python app/main.py --file data/sample_patch_14.24.txt
-   ```
-
-## 💻 Usage
-
-### Basic Usage
+### Backend Setup
 
 ```bash
-# Analyze from local file (recommended for testing)
-python app/main.py --file data/sample_patch_14.24.txt
+# Clone the repository
+git clone https://github.com/yourusername/LOLTopNews.git
+cd LOLTopNews
 
-# Fetch and analyze latest patch
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure API keys
+cp .env.example .env
+# Edit .env and add your DEEPSEEK_API_KEY
+
+# Run CLI
 python app/main.py --version latest
 
-# Analyze specific version (falls back to latest for now)
+# Or run API server
+python app/api.py
+```
+
+### Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Configure API URL
+cp .env.example .env
+# Set VITE_API_URL=http://localhost:8000
+
+# Run development server
+npm run dev
+```
+
+## Usage
+
+### CLI
+
+```bash
+# Analyze latest patch
+python app/main.py --version latest
+
+# Analyze specific version
 python app/main.py --version 15.24
+
+# Analyze from local file
+python app/main.py --file data/sample_patch_14.24.txt
 ```
 
-### Command Line Options
+### REST API
 
 ```bash
-python app/main.py [OPTIONS]
+# Start the API server
+python app/api.py
 
-Options:
-  --file PATH       Read patch notes from local file
-  --version TEXT    Version number (e.g., "15.24") or "latest" [default: latest]
-  -h, --help       Show this help message
+# API Endpoints
+curl http://localhost:8000/api/analyze?version=latest
+curl http://localhost:8000/health
 ```
 
-## 📸 Examples
-
-### Example 1: Analyze Latest Patch
-
-```bash
-$ python app/main.py --version latest
-
-======================================================================
-LOL Top Lane Guide - 上单版本更新分析
-======================================================================
-
-🔍 爬取版本: latest
-✅ 爬取成功: 8732 字符
-   来源: https://lol.qq.com/gicp/news/410/37072785.html
-
-🤖 开始分析...
-----------------------------------------------------------------------
-============================================================
-Node: Extractor - 开始提取上单相关变更
-============================================================
-调用 LLM 提取...
-LLM 响应成功
-✅ Extractor 完成: 提取到 6 个上单相关变更
-Token 使用: 输入=5839, 输出=918
-
-======================================================================
-📊 分析结果
-======================================================================
-
-版本号: 15.24
-
-✅ 提取到 6 个上单相关变更
-
-🦸 英雄变更 (3 个):
-   1. ⬆️ 布隆 (主流)
-   2. 🔄 蒙多医生 (主流)
-   3. ⬇️ 内瑟斯 (主流)
-
-📈 影响分析: 待实现 (Day 4-5)
-📝 总结报告: 待实现 (Day 8)
-
-💰 成本统计:
-   Token 使用: 6,757
-   预估成本: ¥0.0077
-
-======================================================================
-✅ 分析完成
-======================================================================
-```
-
-### Example 2: Analyze from Local File
-
-```bash
-$ python app/main.py --file data/sample_patch_14.24.txt
-
-📄 从文件读取: data/sample_patch_14.24.txt
-✅ 读取成功: 7124 字符
-
-🤖 开始分析...
-----------------------------------------------------------------------
-
-✅ 提取到 19 个上单相关变更
-
-🦸 英雄变更 (9 个):
-   1. ⬆️ 剑姬 (主流)
-   2. ⬇️ 诺手 (主流)
-   3. 🔄 剑魔 (主流)
-   ...
-
-⚔️  装备变更 (7 个):
-   1. 黑色切割者
-      └─ 攻击力 50 → 55
-   ...
-
-🎮 系统变更 (3 个):
-   1. 峡谷先锋
-      └─ 先锋撞墙伤害增加
-```
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-# DeepSeek API (Required)
-DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxx
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-DEEPSEEK_MODEL=deepseek-chat
-
-# Tavily Search (Optional - for enhanced analysis)
-TAVILY_API_KEY=tvly-xxxxxxxxxxxxxxxx
-
-# Database (Optional - Day 6-7 feature)
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=lol_top_guide
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_password
-```
-
-### Customization
-
-To modify which champions are considered "top lane", edit the prompt in:
-- `app/agents/nodes/extractor.py` - Line 12-20
-
-To adjust analysis depth, modify:
-- Temperature in `app/agents/llm.py` (0.3 for extraction, 0.7 for analysis)
-- Token limits in `app/agents/nodes/extractor.py` (currently 10,000)
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 LOLTopNews/
 ├── app/
-│   ├── main.py                    # CLI entry point
-│   ├── crawlers/                  # Web scraping
-│   │   ├── base.py                # Base crawler with retry logic
-│   │   └── lol_official.py        # LOL official website crawler
-│   └── agents/                    # LangGraph AI workflow
-│       ├── state.py               # Workflow state definition
-│       ├── llm.py                 # LLM initialization
-│       ├── tools.py               # Optional tools (WebSearch)
-│       ├── workflow.py            # Graph orchestration
-│       └── nodes/                 # Individual processing nodes
-│           ├── extractor.py       # ✅ Extract top lane changes
-│           ├── analyzer.py        # 🔄 Impact analysis (WIP)
-│           └── summarizer.py      # 🔄 Generate reports (WIP)
-├── data/
-│   ├── sample_patch_14.24.txt     # Sample patch notes
-│   └── raw_patches/               # Crawled data (debug only)
-├── scripts/
-│   ├── test_crawler.py            # Test web scraping
-│   └── test_extractor.py          # Test extraction
-├── .env.example                   # Environment template
-├── requirements.txt               # Python dependencies
-├── README.md                      # This file
-└── ARCHITECTURE.md                # Technical design doc
+│   ├── main.py                 # CLI entry point
+│   ├── api.py                  # FastAPI REST API
+│   ├── crawlers/               # Web scraping module
+│   │   ├── base.py             # Base crawler with retry logic
+│   │   └── lol_official.py     # LOL official website crawler
+│   └── agents/                 # LangGraph AI workflow
+│       ├── state.py            # Workflow state definition
+│       ├── llm.py              # LLM initialization
+│       ├── tools.py            # WebSearch tool
+│       ├── workflow.py         # Graph orchestration
+│       └── nodes/              # Processing nodes
+│           ├── extractor.py    # Extract top lane changes
+│           ├── analyzer.py     # Impact analysis
+│           └── summarizer.py   # Report generation
+├── frontend/                   # React frontend
+│   ├── src/
+│   │   ├── components/        # UI components
+│   │   ├── services/          # API services
+│   │   └── App.tsx            # Main app
+│   └── package.json
+├── data/                       # Sample data
+├── scripts/                    # Test scripts
+├── requirements.txt           # Python dependencies
+├── LICENSE                    # MIT License
+└── README.md                  # This file
 ```
 
-## 🛠 Development
+## Module Documentation
+
+### Backend Modules
+
+| Module | File | Description |
+|--------|------|-------------|
+| CLI Entry | `app/main.py` | Command-line interface for patch analysis |
+| REST API | `app/api.py` | FastAPI-based REST API server |
+| Crawler Base | `app/crawlers/base.py` | Base crawler with retry logic, validation |
+| LOL Crawler | `app/crawlers/lol_official.py` | LOL official website scraper |
+| Workflow | `app/agents/workflow.py` | LangGraph workflow orchestration |
+| State | `app/agents/state.py` | WorkflowState type definition |
+| LLM | `app/agents/llm.py` | DeepSeek LLM initialization |
+| Tools | `app/agents/tools.py` | WebSearch tool (Tavily) |
+| Extractor | `app/agents/nodes/extractor.py` | Extract top lane changes |
+| Analyzer | `app/agents/nodes/analyzer.py` | Deep impact analysis |
+| Summarizer | `app/agents/nodes/summarizer.py` | Tier list & build recommendations |
+
+### Frontend Components
+
+| Component | File | Description |
+|-----------|------|-------------|
+| Main App | `frontend/src/App.tsx` | Main React application |
+| API Service | `frontend/src/services/api.ts` | Backend API client |
+| Summary | `frontend/src/components/Summary.tsx` | Executive summary display |
+| Tier List | `frontend/src/components/TierList.tsx` | Champion tier list display |
+| Champion Changes | `frontend/src/components/ChampionChanges.tsx` | Champion changes display |
+| Impact Analysis | `frontend/src/components/ImpactAnalysis.tsx` | Impact analysis display |
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `DEEPSEEK_API_KEY` | DeepSeek API key | Yes |
+| `DEEPSEEK_BASE_URL` | DeepSeek API base URL | No |
+| `DEEPSEEK_MODEL` | Model name (default: deepseek-chat) | No |
+| `TAVILY_API_KEY` | Tavily API key for web search | No |
+
+## Development
 
 ### Running Tests
 
 ```bash
-# Test web crawler
+# Test crawler
 python scripts/test_real_lol_url.py
 
-# Test extractor with sample data
+# Test extractor
 python scripts/test_extractor.py
 ```
 
-### Development Roadmap
+### Code Style
 
-- [x] **Day 1-2**: Project setup, crawler, DeepSeek integration
-- [x] **Day 3**: Extractor node with modular architecture
-- [ ] **Day 4-5**: Analyzer node with parallel processing
-- [ ] **Day 6-7**: PostgreSQL database integration
-- [ ] **Day 8**: Summarizer node (Markdown reports)
-- [ ] **Day 9-14**: Testing, optimization, documentation
+- Follow PEP 8 for Python
+- Use type hints
+- Add docstrings for public functions
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed technical design.
+## API Reference
 
-### Contributing
+### Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | API root |
+| GET | `/health` | Health check |
+| GET | `/api/analyze?version={version}` | Analyze patch (GET) |
+| POST | `/api/analyze` | Analyze patch (POST) |
+
+### Response Format
+
+```json
+{
+  "version": "15.24",
+  "top_lane_changes": [...],
+  "impact_analyses": [...],
+  "summary_report": {
+    "tier_list": {...},
+    "meta_ecosystem": {...},
+    "champion_details": [...],
+    "counter_matrix": {...}
+  },
+  "metadata": {...}
+}
+```
+
+## Cost Analysis
+
+| Module | Tokens | Cost (DeepSeek) |
+|--------|--------|-----------------|
+| Extractor | ~7K | ¥0.008 |
+| Analyzer | ~5K | ¥0.010 |
+| Summarizer | ~8K | ¥0.012 |
+| **Total** | ~20K | **¥0.030** |
+
+## Tech Stack
+
+### Backend
+- Python 3.12+
+- LangGraph (AI Workflow)
+- DeepSeek (LLM)
+- FastAPI (REST API)
+- aiohttp + BeautifulSoup4 (Web Scraping)
+
+### Frontend
+- React 19
+- TypeScript
+- Vite
+
+## Contributing
 
 Contributions are welcome! Please:
 
@@ -287,93 +284,24 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-### Code Style
-
-- Follow PEP 8
-- Use type hints
-- Add docstrings for public functions
-- Keep functions under 50 lines when possible
-
-## ❓ FAQ
-
-### Q: Why DeepSeek instead of GPT-4?
-
-**A**: Cost efficiency. DeepSeek is 100x cheaper (¥0.03 vs ¥3 per analysis) with excellent Chinese language support, perfect for LOL content.
-
-### Q: How accurate is the extraction?
-
-**A**: Currently ~95% accurate for identifying top lane champions. Occasionally includes off-meta picks that can go top (e.g., Yasuo).
-
-### Q: Can I analyze old patches?
-
-**A**: Currently, the crawler fetches the latest patch. Version-specific crawling is planned for future updates. You can use `--file` with saved patch notes.
-
-### Q: Does it work for other regions?
-
-**A**: Currently optimized for Chinese LOL official website. Support for other regions (NA, EUW, KR) is planned.
-
-### Q: What about privacy/rate limits?
-
-**A**: The tool respects website robots.txt and uses polite crawling (3s delay between requests). All API calls go through your own API keys.
-
-### Q: How much does it cost to run?
-
-**A**: Approximately ¥0.03 per patch analysis with DeepSeek. Analyzing 20 patches costs less than ¥1.
-
-## 📊 Performance
-
-- **Extraction Time**: ~8 seconds
-- **Token Usage**: ~7K tokens per extraction
-- **Cost**: ~¥0.008 per extraction (DeepSeek)
-- **Accuracy**: 95%+ for top lane champion identification
-
-## 🔒 Security
-
-- API keys stored in `.env` (not committed to Git)
-- Input validation prevents command injection
-- No sensitive data stored locally
-- Rate limiting prevents API abuse
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [LangChain](https://github.com/langchain-ai/langchain) & [LangGraph](https://github.com/langchain-ai/langgraph) for AI orchestration
 - [DeepSeek](https://www.deepseek.com/) for cost-effective LLM API
 - [Riot Games](https://www.riotgames.com/) for League of Legends
-- [Tavily](https://tavily.com/) for optional web search enhancement
+- [Tavily](https://tavily.com/) for web search enhancement
 
-## 📞 Support
+## Disclaimer
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/LOLTopNews/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/LOLTopNews/discussions)
-- **Email**: your.email@example.com
-
-## 🗺️ Roadmap
-
-### Current Version: v0.3 (Beta)
-- ✅ Automated web scraping
-- ✅ AI-powered extraction
-- ✅ Top lane filtering
-- 🔄 Impact analysis (in progress)
-- 🔄 Report generation (in progress)
-
-### v1.0 (Planned)
-- Database persistence
-- Complete impact analysis
-- Tier list generation
-- Markdown report export
-
-### v2.0 (Future)
-- Web dashboard
-- Historical analysis
-- Meta prediction
-- Community insights
+This project is not affiliated with Riot Games. All game content and materials are trademarks and copyrights of Riot Games.
 
 ---
 
-**Made with ❤️ for the top lane community**
+**Made with love for the top lane community**
 
-*Last updated: 2026-01-01*
+*Author: David Zhang*
+*License: MIT*

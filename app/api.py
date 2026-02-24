@@ -50,6 +50,22 @@ class AnalysisRequest(BaseModel):
 
 # ==================== API 路由 ====================
 
+async def _fetch_raw_content(version: str) -> str:
+    """Fetch patch notes content for a version."""
+    logger.info(f"🔍 开始爬取版本: {version}")
+    crawler = LOLOfficialCrawler()
+    raw_content = await crawler.fetch_patch_notes(version=version)
+    logger.info(f"✅ 爬取成功: {len(raw_content)} 字符")
+    return raw_content
+
+
+async def _analyze(raw_content: str, version: str):
+    """Run analysis workflow with common logging."""
+    logger.info("🤖 开始分析工作流...")
+    result = await run_workflow(raw_content, version=version)
+    logger.info("✅ 分析完成")
+    return result
+
 @app.get("/")
 async def root():
     """API 根路径"""
@@ -85,18 +101,8 @@ async def analyze_version_get(
     logger.info(f"收到 GET 分析请求: version={version}")
 
     try:
-        # 爬取公告内容
-        logger.info(f"🔍 开始爬取版本: {version}")
-        crawler = LOLOfficialCrawler()
-        raw_content = await crawler.fetch_patch_notes(version=version)
-        logger.info(f"✅ 爬取成功: {len(raw_content)} 字符")
-
-        # 运行分析工作流
-        logger.info("🤖 开始分析工作流...")
-        result = await run_workflow(raw_content, version=version)
-
-        logger.info("✅ 分析完成")
-        return result
+        raw_content = await _fetch_raw_content(version)
+        return await _analyze(raw_content, version)
 
     except Exception as e:
         logger.error(f"❌ 分析失败: {str(e)}")
@@ -127,19 +133,11 @@ async def analyze_version_post(request: AnalysisRequest):
 
         # 如果没有提供内容，则爬取
         if not raw_content:
-            logger.info(f"🔍 开始爬取版本: {version}")
-            crawler = LOLOfficialCrawler()
-            raw_content = await crawler.fetch_patch_notes(version=version)
-            logger.info(f"✅ 爬取成功: {len(raw_content)} 字符")
+            raw_content = await _fetch_raw_content(version)
         else:
             logger.info(f"📄 使用提供的内容: {len(raw_content)} 字符")
 
-        # 运行分析工作流
-        logger.info("🤖 开始分析工作流...")
-        result = await run_workflow(raw_content, version=version)
-
-        logger.info("✅ 分析完成")
-        return result
+        return await _analyze(raw_content, version)
 
     except Exception as e:
         logger.error(f"❌ 分析失败: {str(e)}")

@@ -7,12 +7,132 @@ import argparse
 import sys
 import os
 import logging
+from typing import Dict, Any, List, Tuple
 
 from crawlers.lol_official import LOLOfficialCrawler
 from agents.workflow import run_workflow
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def get_change_symbol(change_type: str) -> str:
+    """Map change type to display symbol."""
+    if change_type == "buff":
+        return "⬆️"
+    if change_type == "nerf":
+        return "⬇️"
+    return "🔄"
+
+
+def split_changes_by_type(changes: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Split extracted changes into champion/item/system groups."""
+    champions = [c for c in changes if c["type"] == "champion"]
+    items = [c for c in changes if c["type"] == "item"]
+    systems = [c for c in changes if c["type"] == "system"]
+    return champions, items, systems
+
+
+async def load_raw_content(args, emit=print):
+    """Load patch notes from file or crawler."""
+    if args.file:
+        emit(f"📄 从文件读取: {args.file}")
+        with open(args.file, "r", encoding="utf-8") as f:
+            raw_content = f.read()
+        emit(f"✅ 读取成功: {len(raw_content)} 字符\n")
+        return raw_content
+
+    emit(f"🔍 爬取版本: {args.version}")
+    crawler = LOLOfficialCrawler()
+    raw_content = await crawler.fetch_patch_notes(version=args.version)
+    emit(f"✅ 爬取成功: {len(raw_content)} 字符")
+    emit(f"   来源: {crawler.last_url}\n")
+    return raw_content
+
+
+def display_result(result: Dict[str, Any], version: str, emit=print):
+    """Render analysis result for CLI output."""
+    emit()
+    emit("=" * 70)
+    emit("📊 分析结果")
+    emit("=" * 70)
+    emit()
+
+    emit(f"版本号: {result.get('version', version)}")
+    emit()
+
+    changes = result.get("top_lane_changes", [])
+    emit(f"✅ 提取到 {len(changes)} 个上单相关变更")
+    emit()
+
+    champions, items, systems = split_changes_by_type(changes)
+
+    if champions:
+        emit(f"🦸 英雄变更 ({len(champions)} 个):")
+        for i, change in enumerate(champions, 1):
+            champion = change.get("champion", "Unknown")
+            change_type = change.get("change_type", "adjust")
+            relevance = change.get("relevance", "primary")
+            tag = "主流" if relevance == "primary" else "冷门"
+            symbol = get_change_symbol(change_type)
+            emit(f"   {i}. {symbol} {champion} ({tag})")
+        emit()
+
+    if items:
+        emit(f"⚔️  装备变更 ({len(items)} 个):")
+        for i, item in enumerate(items, 1):
+            item_name = item.get("item", "Unknown")
+            change = item.get("change", "")
+            emit(f"   {i}. {item_name}")
+            if change and len(change) < 50:
+                emit(f"      └─ {change}")
+        emit()
+
+    if systems:
+        emit(f"🎮 系统变更 ({len(systems)} 个):")
+        for i, system in enumerate(systems, 1):
+            category = system.get("category", "Unknown")
+            change = system.get("change", "")
+            emit(f"   {i}. {category}")
+            if change and len(change) < 50:
+                emit(f"      └─ {change}")
+        emit()
+
+    analyses = result.get("impact_analyses", [])
+    if analyses:
+        emit(f"📈 影响分析 ({len(analyses)} 个):")
+        for analysis in analyses[:3]:
+            emit(f"   - {analysis}")
+        emit()
+    else:
+        emit("📈 影响分析: 待实现 (Day 4-5)")
+        emit()
+
+    summary = result.get("summary_report", {})
+    if summary and summary:
+        emit("📝 总结报告:")
+        emit(f"   {summary}")
+        emit()
+    else:
+        emit("📝 总结报告: 待实现 (Day 8)")
+        emit()
+
+    metadata = result.get("metadata", {})
+    if "extractor_tokens" in metadata:
+        tokens = metadata["extractor_tokens"]
+        total = tokens.get("total_tokens", 0)
+        cost = (
+            tokens.get("prompt_tokens", 0) / 1_000_000 * 1
+            + tokens.get("completion_tokens", 0) / 1_000_000 * 2
+        )
+        emit("💰 成本统计:")
+        emit(f"   Token 使用: {total:,}")
+        emit(f"   预估成本: ¥{cost:.4f}")
+        emit()
+
+    emit("=" * 70)
+    emit("✅ 分析完成")
+    emit("=" * 70)
 
 
 async def main():
@@ -39,32 +159,17 @@ async def main():
     print()
 
     # 1. 获取公告内容
-    raw_content = None
     version = args.version
 
-    if args.file:
-        # 从文件读取
-        print(f"📄 从文件读取: {args.file}")
-        try:
-            with open(args.file, 'r', encoding='utf-8') as f:
-                raw_content = f.read()
-            print(f"✅ 读取成功: {len(raw_content)} 字符\n")
-        except Exception as e:
-            print(f"❌ 读取文件失败: {str(e)}")
-            return
-    else:
-        # 爬取最新版本
-        print(f"🔍 爬取版本: {args.version}")
-        try:
-            crawler = LOLOfficialCrawler()
-            raw_content = await crawler.fetch_patch_notes(version=args.version)
-            print(f"✅ 爬取成功: {len(raw_content)} 字符")
-            print(f"   来源: {crawler.last_url}\n")
-        except Exception as e:
-            print(f"❌ 爬取失败: {str(e)}")
+    try:
+        raw_content = await load_raw_content(args)
+    except Exception as e:
+        action = "读取文件" if args.file else "爬取"
+        print(f"❌ {action}失败: {str(e)}")
+        if not args.file:
             print(f"\n💡 提示: 可以使用 --file 参数指定本地文件")
             print(f"   例如: --file data/sample_patch_14.24.txt")
-            return
+        return
 
     # 2. 运行分析工作流
     print("🤖 开始分析...")
@@ -72,105 +177,7 @@ async def main():
 
     try:
         result = await run_workflow(raw_content, version=version)
-
-        # 3. 显示结果
-        print()
-        print("=" * 70)
-        print("📊 分析结果")
-        print("=" * 70)
-        print()
-    
-        # 版本信息
-        print(f"版本号: {result.get('version', version)}")
-        print()
-
-        # Extractor 结果
-        changes = result.get("top_lane_changes", [])
-        print(f"✅ 提取到 {len(changes)} 个上单相关变更")
-        print()
-
-        # 按类型分组显示
-        champions = [c for c in changes if c["type"] == "champion"]
-        items = [c for c in changes if c["type"] == "item"]
-        systems = [c for c in changes if c["type"] == "system"]
-
-        if champions:
-            print(f"🦸 英雄变更 ({len(champions)} 个):")
-            for i, change in enumerate(champions, 1):
-                champion = change.get("champion", "Unknown")
-                change_type = change.get("change_type", "adjust")
-                relevance = change.get("relevance", "primary")
-
-                # 标记主玩/次选
-                tag = "主流" if relevance == "primary" else "冷门"
-
-                # 标记 buff/nerf
-                if change_type == "buff":
-                    symbol = "⬆️"
-                elif change_type == "nerf":
-                    symbol = "⬇️"
-                else:
-                    symbol = "🔄"
-
-                print(f"   {i}. {symbol} {champion} ({tag})")
-            print()
-
-        if items:
-            print(f"⚔️  装备变更 ({len(items)} 个):")
-            for i, item in enumerate(items, 1):
-                item_name = item.get("item", "Unknown")
-                change = item.get("change", "")
-                print(f"   {i}. {item_name}")
-                if change and len(change) < 50:
-                    print(f"      └─ {change}")
-            print()
-
-        if systems:
-            print(f"🎮 系统变更 ({len(systems)} 个):")
-            for i, sys in enumerate(systems, 1):
-                category = sys.get("category", "Unknown")
-                change = sys.get("change", "")
-                print(f"   {i}. {category}")
-                if change and len(change) < 50:
-                    print(f"      └─ {change}")
-            print()
-
-        # Analyzer 结果（如果已实现）
-        analyses = result.get("impact_analyses", [])
-        if analyses:
-            print(f"📈 影响分析 ({len(analyses)} 个):")
-            for analysis in analyses[:3]:
-                print(f"   - {analysis}")
-            print()
-        else:
-            print("📈 影响分析: 待实现 (Day 4-5)")
-            print()
-
-        # Summarizer 结果（如果已实现）
-        summary = result.get("summary_report", {})
-        if summary and summary:
-            print(f"📝 总结报告:")
-            print(f"   {summary}")
-            print()
-        else:
-            print("📝 总结报告: 待实现 (Day 8)")
-            print()
-
-        # Token 使用统计
-        metadata = result.get("metadata", {})
-        if "extractor_tokens" in metadata:
-            tokens = metadata["extractor_tokens"]
-            total = tokens.get("total_tokens", 0)
-            cost = (tokens.get("prompt_tokens", 0) / 1_000_000 * 1 +
-                   tokens.get("completion_tokens", 0) / 1_000_000 * 2)
-            print(f"💰 成本统计:")
-            print(f"   Token 使用: {total:,}")
-            print(f"   预估成本: ¥{cost:.4f}")
-            print()
-
-        print("=" * 70)
-        print("✅ 分析完成")
-        print("=" * 70)
+        display_result(result, version)
 
     except Exception as e:
         print()
