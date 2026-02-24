@@ -3,7 +3,9 @@ LOL Top Lane Guide - FastAPI REST API
 提供版本更新分析的 REST API 接口
 """
 import logging
-from typing import Optional
+import json
+from pathlib import Path
+from typing import Optional, Dict, Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +16,10 @@ from agents.workflow import run_workflow
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# 缓存配置
+CACHE_DIR = Path("data/cache")
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 # 创建 FastAPI 应用
 app = FastAPI(
@@ -48,22 +54,72 @@ class AnalysisRequest(BaseModel):
         }
 
 
+# ==================== 缓存助手 ====================
+
+def get_cached_analysis(version: str) -> Optional[Dict[str, Any]]:
+    """尝试获取缓存的分析结果"""
+    if version == "latest" or version == "unknown":
+        return None
+        
+    cache_file = CACHE_DIR / f"{version}.json"
+    if cache_file.exists():
+        try:
+            with open(cache_file, "r", encoding="utf-8") as f:
+                logger.info(f"🚀 命中缓存: {version}")
+                return json.load(f)
+        except Exception as e:
+            logger.warning(f"读取缓存失败 {version}: {e}")
+    return None
+
+def save_analysis_to_cache(version: str, result: Dict[str, Any]):
+    """将分析结果保存到缓存"""
+    if version == "unknown":
+        return
+        
+    cache_file = CACHE_DIR / f"{version}.json"
+    try:
+        # 移除不可序列化的部分（如 LangGraph 的 messages 对象中可能有复杂对象）
+        # 这里我们只保存核心字段
+        serializable_result = {
+            "version": result.get("version"),
+            "top_lane_changes": result.get("top_lane_changes"),
+            "impact_analyses": result.get("impact_analyses"),
+            "summary_report": result.get("summary_report"),
+            "metadata": result.get("metadata")
+        }
+        with open(cache_file, "w", encoding="utf-8") as f:
+            json.dump(serializable_result, f, ensure_ascii=False, indent=2)
+        logger.info(f"💾 结果已缓存: {version}")
+    except Exception as e:
+        logger.error(f"保存缓存失败 {version}: {e}")
+
+
 # ==================== API 路由 ====================
 
-async def _fetch_raw_content(version: str) -> str:
+async def _fetch_raw_content(version: str) -> tuple[str, str]:
     """Fetch patch notes content for a version."""
     logger.info(f"🔍 开始爬取版本: {version}")
     crawler = LOLOfficialCrawler()
-    raw_content = await crawler.fetch_patch_notes(version=version)
-    logger.info(f"✅ 爬取成功: {len(raw_content)} 字符")
-    return raw_content
+    raw_content, real_version = await crawler.fetch_patch_notes(version=version)
+    logger.info(f"✅ 爬取成功: {real_version} ({len(raw_content)} 字符)")
+    return raw_content, real_version
 
 
 async def _analyze(raw_content: str, version: str):
-    """Run analysis workflow with common logging."""
-    logger.info("🤖 开始分析工作流...")
+    """Run analysis workflow with common logging and caching."""
+    # 1. 尝试从缓存获取
+    cached_result = get_cached_analysis(version)
+    if cached_result:
+        return cached_result
+
+    # 2. 执行分析
+    logger.info(f"🤖 开始分析工作流 (Version: {version})...")
     result = await run_workflow(raw_content, version=version)
     logger.info("✅ 分析完成")
+
+    # 3. 写入缓存
+    save_analysis_to_cache(version, result)
+    
     return result
 
 @app.get("/")
@@ -101,8 +157,8 @@ async def analyze_version_get(
     logger.info(f"收到 GET 分析请求: version={version}")
 
     try:
-        raw_content = await _fetch_raw_content(version)
-        return await _analyze(raw_content, version)
+        raw_content, real_version = await _fetch_raw_content(version)
+        return await _analyze(raw_content, real_version)
 
     except Exception as e:
         logger.error(f"❌ 分析失败: {str(e)}")
@@ -133,7 +189,7 @@ async def analyze_version_post(request: AnalysisRequest):
 
         # 如果没有提供内容，则爬取
         if not raw_content:
-            raw_content = await _fetch_raw_content(version)
+            raw_content, version = await _fetch_raw_content(version)
         else:
             logger.info(f"📄 使用提供的内容: {len(raw_content)} 字符")
 

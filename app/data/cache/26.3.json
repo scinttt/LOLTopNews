@@ -1,0 +1,675 @@
+{
+  "version": "26.3",
+  "top_lane_changes": [
+    {
+      "type": "champion",
+      "champion": "狂厄蔷薇 贝蕾亚",
+      "change_type": "buff",
+      "relevance": "secondary",
+      "details": {
+        "成长生命值": "95 → 100",
+        "成长护甲": "4.2 → 4.5",
+        "Q/W/E/R 生命值消耗": "6%当前生命值 → 5%当前生命值"
+      }
+    },
+    {
+      "type": "champion",
+      "champion": "大发明家 黑默丁格",
+      "change_type": "buff",
+      "relevance": "secondary",
+      "details": {
+        "成长生命值": "101 → 105",
+        "W - 海克斯科技微型导弹 第一段命中伤害": "40 / 65 / 90 / 115 / 140 (+ 55%法术强度) → 50 / 75 / 100 / 125 / 150 (+ 55%法术强度)"
+      }
+    },
+    {
+      "type": "champion",
+      "champion": "未来守护者 杰斯",
+      "change_type": "adjust",
+      "relevance": "primary",
+      "details": {
+        "Q - 苍穹之跃! 伤害": "60 / 105 / 150 / 295 / 240 / 285 (+135%额外攻击力) → 60 / 110 / 160 / 210 / 260 / 310 (+ 135%额外攻击力)",
+        "Q - 电能震荡 伤害": "80 / 126 / 172 / 218 / 264 / 310 (+ 140%额外攻击力) → 80 / 121 / 162 / 203 / 244 / 285 (+ 130%额外攻击力)",
+        "R - 炮形态：墨丘利之炮 护甲/魔抗击碎": "10 / 15 / 20 / 25% → 20 / 25 / 30 / 35%",
+        "Q技能对野怪额外伤害": "25 → 10 (削弱打野能力，可能鼓励回归上路)"
+      }
+    },
+    {
+      "type": "champion",
+      "champion": "扭曲树精 茂凯",
+      "change_type": "buff",
+      "relevance": "secondary",
+      "details": {
+        "Q - 荆棘重击 固定伤害": "65 / 110 / 155 / 200 / 245 → 75 / 120 / 165 / 210 / 255"
+      }
+    },
+    {
+      "type": "system",
+      "category": "防御塔",
+      "change": "【壁垒】临时双抗：取决于附近敌方英雄人数，每镀层20-100 → 取决于附近敌方英雄人数，每镀层30-50 (旨在更好地抵御单人推进，降低对队伍的阻碍程度)"
+    },
+    {
+      "type": "system",
+      "category": "视野",
+      "change": "河道小草丛中的精灵视野：显形区域形状从延伸至迅捷蟹区域与史诗级野怪巢穴入口，改为在入口前截断 (削弱前期视野对打野的干扰，可能间接影响上路对线安全)"
+    }
+  ],
+  "impact_analyses": [
+    {
+      "champion_analyses": [
+        {
+          "champion": "狂厄蔷薇 贝蕾亚",
+          "change_type": "buff",
+          "gameplay_changes": {
+            "laning_phase": "成长生命值和护甲提升，技能生命值消耗从6%降低到5%，显著增强了对线期的换血能力和生存能力。贝蕾亚作为依赖生命偷取的战士，更低的技能消耗意味着她能更频繁地使用技能进行换血和清线，同时保持更高的血量。",
+            "teamfight_role": "团战中，更高的生命值和护甲让她在切入时更加耐打，配合生命偷取效果，持续作战能力得到提升。技能消耗降低也让她在团战中能更自由地使用技能进行追击和收割。",
+            "build_adjustment": "由于基础属性增强，可以更早地转向攻击装备，减少对防御装备的依赖。破败王者之刃、斯特拉克的挑战护手等装备的优先级可能提高。"
+          },
+          "meta_impact": {
+            "tier_prediction": "B+",
+            "tier_change": "从C tier到B+ tier",
+            "counter_changes": [
+              "增强对抗依赖持续输出的战士（如剑姬、刀妹）",
+              "削弱对抗爆发型英雄（如杰斯、潘森）的劣势可能减少"
+            ],
+            "synergy_items": [
+              "破败王者之刃",
+              "斯特拉克的挑战护手",
+              "死亡之舞",
+              "黑色切割者"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 7,
+            "worth_practicing": true,
+            "win_rate_trend": "预计上升3-4%",
+            "reasoning": "全面的属性提升和技能消耗降低，对贝蕾亚这种依赖技能频率的英雄是显著加强。成长生命值和护甲的提升让她在中后期更加耐打，技能消耗降低提高了对线期的换血效率。"
+          }
+        },
+        {
+          "champion": "大发明家 黑默丁格",
+          "change_type": "buff",
+          "gameplay_changes": {
+            "laning_phase": "成长生命值提升和W技能第一段伤害增加，增强了黑默丁格的对线压制力。更高的生命值让他能更好地承受对手的突进，W技能伤害提升提高了消耗能力和清线效率。",
+            "teamfight_role": "团战中，W技能作为主要输出手段之一，伤害提升让他在poke阶段更具威胁。生命值提升也让他布置炮台时更加安全。",
+            "build_adjustment": "由于基础生命值提升，可以更专注于法术强度和冷却缩减装备。卢登的激荡、中娅沙漏等装备仍然是核心选择。"
+          },
+          "meta_impact": {
+            "tier_prediction": "B",
+            "tier_change": "从C tier到B tier",
+            "counter_changes": [
+              "增强对抗近战战士（如诺手、鳄鱼）",
+              "对线期压制力更强"
+            ],
+            "synergy_items": [
+              "卢登的激荡",
+              "中娅沙漏",
+              "虚空之杖",
+              "灭世者的死亡之帽"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 6,
+            "worth_practicing": true,
+            "win_rate_trend": "预计上升2-3%",
+            "reasoning": "虽然改动幅度不大，但成长生命值和W技能伤害的提升对黑默丁格这种依赖poke和阵地战的英雄是有意义的加强。特别是对抗近战战士时，压制力会更强。"
+          }
+        },
+        {
+          "champion": "未来守护者 杰斯",
+          "change_type": "adjust",
+          "gameplay_changes": {
+            "laning_phase": "近战Q伤害提升但远程Q伤害降低，R技能破甲效果大幅增强。这意味着杰斯需要更频繁地切近战形态进行换血，而不是单纯依赖远程poke。对线打法需要更激进，利用近战形态的伤害和破甲效果。",
+            "teamfight_role": "团战中，R技能破甲效果从10-25%提升到20-35%，大幅增强了团队物理伤害输出。杰斯需要更精准地切换形态，在适当时机使用近战形态切入并施加破甲效果。",
+            "build_adjustment": "由于远程Q伤害降低但破甲效果增强，出装可能需要调整。黑色切割者、幽梦之灵等穿甲装备的优先级可能提高，以最大化破甲效果。"
+          },
+          "meta_impact": {
+            "tier_prediction": "A-",
+            "tier_change": "从B tier到A- tier",
+            "counter_changes": [
+              "增强对抗坦克英雄（如奥恩、塞恩）",
+              "削弱对抗远程poke英雄（如凯南）"
+            ],
+            "synergy_items": [
+              "黑色切割者",
+              "幽梦之灵",
+              "魔宗",
+              "赛瑞尔达的怨恨"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 8,
+            "worth_practicing": true,
+            "win_rate_trend": "预计上升4-5%",
+            "reasoning": "虽然远程Q伤害有所降低，但近战Q伤害提升和R技能破甲效果的大幅增强是巨大的buff。这鼓励杰斯玩家更积极地使用近战形态，而不是单纯依赖远程poke。破甲效果的提升对团队贡献极大。"
+          }
+        },
+        {
+          "champion": "扭曲树精 茂凯",
+          "change_type": "buff",
+          "gameplay_changes": {
+            "laning_phase": "Q技能基础伤害全面提升，增强了茂凯的清线能力和换血能力。作为坦克英雄，更高的伤害意味着他能更好地压制对手，特别是在前期对线阶段。",
+            "teamfight_role": "团战中，Q技能伤害提升让茂凯在控制敌人的同时能造成更多伤害。虽然主要定位仍然是开团和控制，但伤害提升增加了他的威胁性。",
+            "build_adjustment": "出装思路基本不变，仍然以坦克装备为主。日炎圣盾、冰脉护手等装备仍然是核心选择。"
+          },
+          "meta_impact": {
+            "tier_prediction": "B",
+            "tier_change": "从C tier到B tier",
+            "counter_changes": [
+              "增强对抗脆皮战士（如剑姬、刀妹）",
+              "清线能力提升，对抗推线英雄更有优势"
+            ],
+            "synergy_items": [
+              "日炎圣盾",
+              "冰脉护手",
+              "荆棘之甲",
+              "兰顿之兆"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 6,
+            "worth_practicing": true,
+            "win_rate_trend": "预计上升2-3%",
+            "reasoning": "Q技能伤害的全面提升对茂凯是直接的加强，特别是在对线期。虽然改动幅度不大，但对于这种依赖基础技能的坦克英雄来说，伤害提升能显著改善游戏体验。"
+          }
+        }
+      ],
+      "meta_overview": {
+        "top_tier_champions": [
+          "杰斯",
+          "剑姬",
+          "诺手",
+          "剑魔"
+        ],
+        "rising_picks": [
+          "杰斯",
+          "贝蕾亚",
+          "茂凯"
+        ],
+        "falling_picks": [
+          "依赖远程poke的英雄"
+        ],
+        "meta_shift_summary": "本版本上路meta呈现以下趋势：1) 杰斯获得显著加强，特别是破甲效果的大幅提升，可能成为版本强势选择；2) 贝蕾亚的全面属性提升让她在对线期更加稳定；3) 防御塔机制的调整（壁垒双抗从20-100改为30-50）旨在平衡单人推线和团队推进，对分推英雄有一定影响；4) 视野机制的调整（精灵视野范围缩小）可能让上路对线更加安全，减少被gank的风险。整体来看，战士和坦克英雄都有所加强，而纯poke型英雄的相对强度可能下降。"
+      },
+      "analysis_timestamp": "26.3"
+    }
+  ],
+  "summary_report": {
+    "version_info": {
+      "version": "26.3",
+      "total_changes": 6,
+      "champion_changes": 4
+    },
+    "tier_list": {
+      "S": [
+        {
+          "champion": "未来守护者 杰斯",
+          "tier": "S",
+          "reason": "近战Q伤害提升和R技能破甲效果增强，使其在对抗坦克时表现突出",
+          "change_type": "adjust",
+          "strength_score": 8,
+          "tags": [
+            "战士",
+            "破甲",
+            "多形态"
+          ]
+        }
+      ],
+      "A": [],
+      "B": [
+        {
+          "champion": "狂厄蔷薇 贝蕾亚",
+          "tier": "B+",
+          "reason": "成长生命值和护甲提升，技能消耗减少，增强对线和团战能力",
+          "change_type": "buff",
+          "strength_score": 7,
+          "tags": [
+            "战士",
+            "生命偷取",
+            "团战"
+          ]
+        },
+        {
+          "champion": "大发明家 黑默丁格",
+          "tier": "B",
+          "reason": "W技能伤害提升和成长生命值增加，增强对线压制力",
+          "change_type": "buff",
+          "strength_score": 6,
+          "tags": [
+            "法师",
+            "poke",
+            "阵地战"
+          ]
+        },
+        {
+          "champion": "扭曲树精 茂凯",
+          "tier": "B",
+          "reason": "Q技能伤害提升，增强清线和换血能力",
+          "change_type": "buff",
+          "strength_score": 6,
+          "tags": [
+            "坦克",
+            "控制",
+            "团战"
+          ]
+        }
+      ],
+      "C": [],
+      "D": []
+    },
+    "meta_ecosystem": {
+      "dominant_archetypes": [
+        {
+          "type": "战士",
+          "champions": [
+            "未来守护者 杰斯",
+            "狂厄蔷薇 贝蕾亚"
+          ],
+          "reason": "破甲和生命偷取能力增强，使战士在对抗坦克和持续作战中表现优异"
+        },
+        {
+          "type": "坦克",
+          "champions": [
+            "扭曲树精 茂凯"
+          ],
+          "reason": "Q技能伤害提升，增强了清线和对线压制能力"
+        }
+      ],
+      "declining_archetypes": [
+        {
+          "type": "远程poke",
+          "champions": [],
+          "reason": "依赖远程poke的英雄相对强度下降"
+        }
+      ],
+      "playstyle_trends": [
+        "战士和坦克英雄在当前版本表现突出",
+        "远程poke型英雄的相对强度下降"
+      ]
+    },
+    "executive_summary": "本版本战士和坦克英雄回归，未来守护者 杰斯成为T0级别的强势选择，而远程poke型英雄的相对强度下降。",
+    "tokens": {
+      "completion_tokens": 2951,
+      "prompt_tokens": 3874,
+      "total_tokens": 6825,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0
+      }
+    },
+    "champion_details": [
+      {
+        "champion": "狂厄蔷薇 贝蕾亚",
+        "tier": "B+",
+        "change_summary": "成长生命值和护甲提升，技能消耗减少",
+        "gameplay_impact": {
+          "laning_phase": "成长生命值和护甲提升，技能生命值消耗从6%降低到5%，显著增强了对线期的换血能力和生存能力。贝蕾亚作为依赖生命偷取的战士，更低的技能消耗意味着她能更频繁地使用技能进行换血和清线，同时保持更高的血量。",
+          "teamfight_role": "团战中，更高的生命值和护甲让她在切入时更加耐打，配合生命偷取效果，持续作战能力得到提升。技能消耗降低也让她在团战中能更自由地使用技能进行追击和收割。",
+          "build_adjustment": "由于基础属性增强，可以更早地转向攻击装备，减少对防御装备的依赖。破败王者之刃、斯特拉克的挑战护手等装备的优先级可能提高。"
+        },
+        "recommended_builds": [
+          {
+            "name": "生命偷取战士",
+            "core_items": [
+              "破败王者之刃",
+              "斯特拉克的挑战护手",
+              "死亡之舞"
+            ],
+            "boots": "铁板靴",
+            "situational": [
+              "守护天使",
+              "振奋铠甲"
+            ],
+            "reason": "利用破败和斯特拉克的生命偷取和护盾效果，增强生存能力和持续输出。",
+            "适用场景": "对阵持续输出为主的阵容",
+            "runes": "征服者"
+          },
+          {
+            "name": "高爆发战士",
+            "core_items": [
+              "黑色切割者",
+              "幽梦之灵",
+              "赛瑞尔达的怨恨"
+            ],
+            "boots": "忍者足具",
+            "situational": [
+              "死亡之舞",
+              "玛莫提乌斯之噬"
+            ],
+            "reason": "通过穿甲和冷却缩减提高爆发能力，适合快速击杀敌方后排。",
+            "适用场景": "对阵脆皮后排较多的阵容",
+            "runes": "强攻"
+          }
+        ]
+      },
+      {
+        "champion": "大发明家 黑默丁格",
+        "tier": "B",
+        "change_summary": "W技能伤害提升，成长生命值增加",
+        "gameplay_impact": {
+          "laning_phase": "成长生命值提升和W技能第一段伤害增加，增强了黑默丁格的对线压制力。更高的生命值让他能更好地承受对手的突进，W技能伤害提升提高了消耗能力和清线效率。",
+          "teamfight_role": "团战中，W技能作为主要输出手段之一，伤害提升让他在poke阶段更具威胁。生命值提升也让他布置炮台时更加安全。",
+          "build_adjustment": "由于基础生命值提升，可以更专注于法术强度和冷却缩减装备。卢登的激荡、中娅沙漏等装备仍然是核心选择。"
+        },
+        "recommended_builds": [
+          {
+            "name": "poke法师",
+            "core_items": [
+              "卢登的激荡",
+              "中娅沙漏",
+              "虚空之杖"
+            ],
+            "boots": "法穿鞋",
+            "situational": [
+              "灭世者的死亡之帽",
+              "莫雷洛秘典"
+            ],
+            "reason": "通过高法强和冷却缩减提高poke能力，适合远程消耗敌人。",
+            "适用场景": "对阵需要持续poke的阵容",
+            "runes": "奥术彗星"
+          },
+          {
+            "name": "控制法师",
+            "core_items": [
+              "中娅沙漏",
+              "冰杖",
+              "深渊面具"
+            ],
+            "boots": "水银之靴",
+            "situational": [
+              "振奋铠甲",
+              "兰德里的苦楚"
+            ],
+            "reason": "增加生存能力和控制效果，适合在团战中提供持续输出和控制。",
+            "适用场景": "对阵需要控制和生存的阵容",
+            "runes": "召唤：艾黎"
+          }
+        ]
+      },
+      {
+        "champion": "未来守护者 杰斯",
+        "tier": "A-",
+        "change_summary": "近战Q伤害提升，R技能破甲效果增强",
+        "gameplay_impact": {
+          "laning_phase": "近战Q伤害提升但远程Q伤害降低，R技能破甲效果大幅增强。这意味着杰斯需要更频繁地切近战形态进行换血，而不是单纯依赖远程poke。对线打法需要更激进，利用近战形态的伤害和破甲效果。",
+          "teamfight_role": "团战中，R技能破甲效果从10-25%提升到20-35%，大幅增强了团队物理伤害输出。杰斯需要更精准地切换形态，在适当时机使用近战形态切入并施加破甲效果。",
+          "build_adjustment": "由于远程Q伤害降低但破甲效果增强，出装可能需要调整。黑色切割者、幽梦之灵等穿甲装备的优先级可能提高，以最大化破甲效果。"
+        },
+        "recommended_builds": [
+          {
+            "name": "破甲战士",
+            "core_items": [
+              "黑色切割者",
+              "幽梦之灵",
+              "赛瑞尔达的怨恨"
+            ],
+            "boots": "忍者足具",
+            "situational": [
+              "玛莫提乌斯之噬",
+              "守护天使"
+            ],
+            "reason": "最大化破甲效果，增强对抗坦克的能力。",
+            "适用场景": "对阵坦克较多的阵容",
+            "runes": "征服者"
+          },
+          {
+            "name": "爆发刺客",
+            "core_items": [
+              "幽梦之灵",
+              "德拉克萨的暮刃",
+              "魔宗"
+            ],
+            "boots": "明朗之靴",
+            "situational": [
+              "夜之锋刃",
+              "死亡之舞"
+            ],
+            "reason": "提高爆发伤害和切入能力，适合快速击杀脆皮目标。",
+            "适用场景": "对阵脆皮后排较多的阵容",
+            "runes": "电刑"
+          }
+        ]
+      },
+      {
+        "champion": "扭曲树精 茂凯",
+        "tier": "B",
+        "change_summary": "Q技能伤害提升",
+        "gameplay_impact": {
+          "laning_phase": "Q技能基础伤害全面提升，增强了茂凯的清线能力和换血能力。作为坦克英雄，更高的伤害意味着他能更好地压制对手，特别是在前期对线阶段。",
+          "teamfight_role": "团战中，Q技能伤害提升让茂凯在控制敌人的同时能造成更多伤害。虽然主要定位仍然是开团和控制，但伤害提升增加了他的威胁性。",
+          "build_adjustment": "出装思路基本不变，仍然以坦克装备为主。日炎圣盾、冰脉护手等装备仍然是核心选择。"
+        },
+        "recommended_builds": [
+          {
+            "name": "标准坦克",
+            "core_items": [
+              "日炎圣盾",
+              "冰脉护手",
+              "兰顿之兆"
+            ],
+            "boots": "水银之靴",
+            "situational": [
+              "荆棘之甲",
+              "自然之力"
+            ],
+            "reason": "最大化坦度和控制能力，适合承担前排角色。",
+            "适用场景": "对阵物理输出为主的阵容",
+            "runes": "余震"
+          },
+          {
+            "name": "法坦混合",
+            "core_items": [
+              "日炎圣盾",
+              "深渊面具",
+              "振奋铠甲"
+            ],
+            "boots": "法穿鞋",
+            "situational": [
+              "兰德里的苦楚",
+              "亡者的板甲"
+            ],
+            "reason": "结合坦度和法术伤害，适合对抗法系英雄。",
+            "适用场景": "对阵法系输出为主的阵容",
+            "runes": "余震"
+          }
+        ]
+      }
+    ],
+    "counter_matrix": {
+      "狂厄蔷薇 贝蕾亚": {
+        "counters": [
+          {
+            "champion": "剑姬",
+            "reason": "提升的生存能力和生命偷取可以抵消剑姬的持续输出"
+          },
+          {
+            "champion": "刀妹",
+            "reason": "增强的对线能力让她在换血中占据上风"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "杰斯",
+            "reason": "高爆发输出可以快速击杀"
+          },
+          {
+            "champion": "潘森",
+            "reason": "爆发伤害压制她的生命偷取"
+          }
+        ],
+        "changes_this_patch": [
+          "增强对抗依赖持续输出的战士（如剑姬、刀妹）",
+          "削弱对抗爆发型英雄（如杰斯、潘森）的劣势可能减少"
+        ]
+      },
+      "大发明家 黑默丁格": {
+        "counters": [
+          {
+            "champion": "诺手",
+            "reason": "提高的poke能力可以在安全距离消耗诺手"
+          },
+          {
+            "champion": "鳄鱼",
+            "reason": "远程消耗可以限制鳄鱼的突进"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "阿卡丽",
+            "reason": "高机动性和爆发可以快速击杀"
+          },
+          {
+            "champion": "劫",
+            "reason": "突进和爆发压制他的poke"
+          }
+        ],
+        "changes_this_patch": [
+          "增强对抗近战战士（如诺手、鳄鱼）",
+          "对线期压制力更强"
+        ]
+      },
+      "未来守护者 杰斯": {
+        "counters": [
+          {
+            "champion": "奥恩",
+            "reason": "破甲效果可以有效压制奥恩的坦度"
+          },
+          {
+            "champion": "塞恩",
+            "reason": "高破甲和爆发伤害可以快速削减塞恩的生命值"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "凯南",
+            "reason": "远程poke和控制压制他的切入"
+          },
+          {
+            "champion": "奎因",
+            "reason": "高机动性和远程压制"
+          }
+        ],
+        "changes_this_patch": [
+          "增强对抗坦克英雄（如奥恩、塞恩）",
+          "削弱对抗远程poke英雄（如凯南）"
+        ]
+      },
+      "扭曲树精 茂凯": {
+        "counters": [
+          {
+            "champion": "剑姬",
+            "reason": "提高的清线和换血能力可以压制剑姬"
+          },
+          {
+            "champion": "刀妹",
+            "reason": "控制和伤害提升可以限制刀妹的灵活性"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "厄加特",
+            "reason": "高输出和控制压制他的坦度"
+          },
+          {
+            "champion": "卡尔玛",
+            "reason": "poke和护盾可以抵消他的控制"
+          }
+        ],
+        "changes_this_patch": [
+          "增强对抗脆皮战士（如剑姬、刀妹）",
+          "清线能力提升，对抗推线英雄更有优势"
+        ]
+      }
+    },
+    "key_highlights": [
+      {
+        "type": "champion_buff",
+        "champion": "狂厄蔷薇 贝蕾亚",
+        "summary": "成长生命值和护甲提升，技能消耗减少，增强对线和团战能力",
+        "impact_level": "medium"
+      },
+      {
+        "type": "champion_buff",
+        "champion": "大发明家 黑默丁格",
+        "summary": "W技能伤害提升和成长生命值增加，增强对线压制力",
+        "impact_level": "medium"
+      },
+      {
+        "type": "champion_adjust",
+        "champion": "未来守护者 杰斯",
+        "summary": "近战Q伤害提升和R技能破甲效果增强，使其在对抗坦克时表现突出",
+        "impact_level": "high"
+      },
+      {
+        "type": "champion_buff",
+        "champion": "扭曲树精 茂凯",
+        "summary": "Q技能伤害提升，增强清线和换血能力",
+        "impact_level": "medium"
+      }
+    ]
+  },
+  "metadata": {
+    "extractor_tokens": {
+      "completion_tokens": 703,
+      "prompt_tokens": 6743,
+      "total_tokens": 7446,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 6720
+      },
+      "prompt_cache_hit_tokens": 6720,
+      "prompt_cache_miss_tokens": 23
+    },
+    "analyzer_tokens": {
+      "completion_tokens": 1754,
+      "prompt_tokens": 8555,
+      "total_tokens": 10309,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 8512
+      },
+      "prompt_cache_hit_tokens": 8512,
+      "prompt_cache_miss_tokens": 43
+    },
+    "summarizer_tokens": {
+      "step1": {
+        "completion_tokens": 645,
+        "prompt_tokens": 2601,
+        "total_tokens": 3246,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        }
+      },
+      "step2": {
+        "completion_tokens": 2951,
+        "prompt_tokens": 3874,
+        "total_tokens": 6825,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,532 @@
+{
+  "version": "26.2",
+  "top_lane_changes": [
+    {
+      "type": "champion",
+      "champion": "暗裔剑魔 亚托克斯",
+      "change_type": "buff",
+      "relevance": "primary",
+      "details": {
+        "被动技能 - 赐死剑气": "基于目标最大生命值的额外魔法伤害：4-8% (基于等级) → 4-10% (基于等级)",
+        "Q - 暗裔之刃": "对野怪的额外伤害：15 → 25 (注：可能影响上单剑魔的清野/反野能力)"
+      }
+    },
+    {
+      "type": "champion",
+      "champion": "熔岩巨兽 墨菲特",
+      "change_type": "nerf",
+      "relevance": "primary",
+      "details": {
+        "E - 大地震颤": "法力消耗：50 → 50 / 55 / 60 / 65 / 70",
+        "R - 势不可挡": "冷却时间：130 / 105 / 80 → 130 / 115 / 100"
+      }
+    },
+    {
+      "type": "champion",
+      "champion": "破败之王 佛耶戈",
+      "change_type": "buff",
+      "relevance": "secondary",
+      "details": {
+        "基础属性": "成长攻击速度：2.25% → 2.75%",
+        "Q - 破败王剑": "主动额外暴击伤害修正：50% → 60%"
+      }
+    },
+    {
+      "type": "item",
+      "item": "猎魔人弩箭",
+      "change": "攻击速度：40% → 45%；必然暴击的伤害倍数：75% → 80%；暴击的额外真实伤害：10% → 15%"
+    },
+    {
+      "type": "item",
+      "item": "海克斯镜片 C44",
+      "change": "攻击力：50 → 55；最大伤害增幅的距离要求：700 → 600"
+    }
+  ],
+  "impact_analyses": [
+    {
+      "champion_analyses": [
+        {
+          "champion": "暗裔剑魔 亚托克斯",
+          "change_type": "buff",
+          "gameplay_changes": {
+            "laning_phase": "被动最大生命值伤害从4-8%提升到4-10%，对线期换血能力显著增强。特别是6级后，被动的百分比伤害提升让剑魔在对抗坦克英雄时更有优势。Q技能对野怪伤害增加虽然主要针对打野位，但上单剑魔在反野或清理石甲虫时也会受益。",
+            "teamfight_role": "团战中被动伤害的提升让剑魔的斩杀能力更强，特别是对抗高生命值的前排英雄。这增强了剑魔作为重装战士的持续作战能力，配合征服者符文能造成更多混合伤害。",
+            "build_adjustment": "被动魔法伤害提升可能让剑魔更倾向于混合伤害出装。可以考虑搭配黑切+死舞+斯特拉克的标准战士出装，被动百分比伤害的提升让剑魔即使不出太多攻击力装备也能造成可观伤害。"
+          },
+          "meta_impact": {
+            "tier_prediction": "A",
+            "tier_change": "从B tier到A tier",
+            "counter_changes": [
+              "增强对抗坦克英雄（奥恩、塞恩）",
+              "增强对抗高生命值战士（盖伦、蒙多）"
+            ],
+            "synergy_items": [
+              "黑切",
+              "死舞",
+              "斯特拉克的挑战护手",
+              "破败王者之刃"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 7,
+            "worth_practicing": true,
+            "win_rate_trend": "预计上升",
+            "reasoning": "被动百分比伤害的显著提升直接增强了剑魔的核心换血能力。从4-8%到4-10%看似不大，但实际对线期和团战中的伤害提升明显。特别是在当前分推meta下，剑魔的单挑能力得到加强，能更好地应对分推战术。"
+          }
+        },
+        {
+          "champion": "熔岩巨兽 墨菲特",
+          "change_type": "nerf",
+          "gameplay_changes": {
+            "laning_phase": "E技能法力消耗增加（50固定→50/55/60/65/70）和R技能冷却时间延长（130/105/80→130/115/100）是双重削弱。对线期需要更谨慎使用E技能清兵和换血，蓝耗管理更加重要。大招冷却延长减少了开团频率，需要更谨慎选择开团时机。",
+            "teamfight_role": "团战开团能力被削弱，大招冷却时间在中期（11级）从105秒增加到115秒，后期（16级）从80秒增加到100秒。这意味着墨菲特在关键团战中的容错率降低，如果大招使用不当，需要等待更长时间才能再次参团。",
+            "build_adjustment": "可能需要更注重法力值装备，如冰脉护手或冰霜之心。也可以考虑更早出女神泪来缓解蓝耗压力。由于大招冷却延长，可能需要考虑出一些冷却缩减装备来弥补。"
+          },
+          "meta_impact": {
+            "tier_prediction": "B",
+            "tier_change": "从A tier到B tier",
+            "counter_changes": [
+              "削弱对抗AD战士（剑姬、青钢影）",
+              "削弱对抗分推英雄"
+            ],
+            "synergy_items": [
+              "日炎圣盾",
+              "冰脉护手",
+              "冰霜之心",
+              "深渊面具"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 4,
+            "worth_practicing": false,
+            "win_rate_trend": "预计下降",
+            "reasoning": "这是对墨菲特的双重削弱：对线期蓝耗增加影响清兵和换血能力，大招冷却延长严重影响团战影响力。在当前强调分推和单带的meta下，墨菲特本就难以应对灵活的分推英雄，这次削弱让他的处境更加艰难。"
+          }
+        },
+        {
+          "champion": "破败之王 佛耶戈",
+          "change_type": "buff",
+          "gameplay_changes": {
+            "laning_phase": "成长攻速从2.25%提升到2.75%显著增强了佛耶戈的平A手感和对线换血能力。Q技能暴击伤害修正从50%提升到60%让暴击流佛耶戈的爆发更高。这些改动让佛耶戈在对线期的持续输出和爆发能力都有所提升。",
+            "teamfight_role": "团战中攻速提升让佛耶戈能更快打出被动标记，Q技能暴击伤害提升增强了收割能力。配合被动捡魂机制，佛耶戈在团战中的滚雪球能力更强。",
+            "build_adjustment": "暴击伤害提升可能让暴击流佛耶戈重新成为可行选择。可以考虑破败+盾弓+无尽的标准暴击出装，或者继续走战士流（破败+黑切+死舞）。攻速提升也让攻速装备的收益更高。"
+          },
+          "meta_impact": {
+            "tier_prediction": "B+",
+            "tier_change": "从C tier到B tier",
+            "counter_changes": [
+              "增强对抗脆皮战士",
+              "增强对抗分推英雄"
+            ],
+            "synergy_items": [
+              "破败王者之刃",
+              "斯特拉克的挑战护手",
+              "无尽之刃",
+              "盾弓"
+            ]
+          },
+          "overall_assessment": {
+            "strength_score": 6,
+            "worth_practicing": true,
+            "win_rate_trend": "预计上升",
+            "reasoning": "虽然佛耶戈在上单位置不是主流，但这次加强让他的对线能力得到显著提升。成长攻速是前期非常重要的属性，Q技能暴击伤害提升也让他的爆发更高。在当前分推meta下，佛耶戈的单挑和分推能力可能让他成为一个有趣的niche选择。"
+          }
+        }
+      ],
+      "meta_overview": {
+        "top_tier_champions": [
+          "剑姬",
+          "青钢影",
+          "诺手",
+          "刀妹"
+        ],
+        "rising_picks": [
+          "剑魔",
+          "佛耶戈"
+        ],
+        "falling_picks": [
+          "墨菲特",
+          "奥恩"
+        ],
+        "meta_shift_summary": "本版本继续强化分推和单带meta。剑魔的加强让重装战士在对线坦克时有更大优势，墨菲特的削弱让坦克上单的处境更加艰难。装备方面，猎魔人弩箭和海克斯镜片的加强可能让一些AD战士和射手型上单受益。整体趋势仍然是偏向机动性强、单挑能力出色的战士英雄。"
+      },
+      "analysis_timestamp": "26.2"
+    }
+  ],
+  "summary_report": {
+    "version_info": {
+      "version": "26.2",
+      "total_changes": 5,
+      "champion_changes": 3
+    },
+    "tier_list": {
+      "S": [],
+      "A": [
+        {
+          "champion": "暗裔剑魔 亚托克斯",
+          "tier": "A",
+          "reason": "被动百分比伤害的显著提升直接增强了剑魔的核心换血能力。",
+          "change_type": "buff",
+          "strength_score": 7,
+          "tags": [
+            "战士",
+            "单带",
+            "团战"
+          ]
+        }
+      ],
+      "B": [
+        {
+          "champion": "破败之王 佛耶戈",
+          "tier": "B",
+          "reason": "成长攻速和Q技能暴击伤害的提升增强了对线和团战能力。",
+          "change_type": "buff",
+          "strength_score": 6,
+          "tags": [
+            "战士",
+            "单带",
+            "爆发"
+          ]
+        },
+        {
+          "champion": "熔岩巨兽 墨菲特",
+          "tier": "B",
+          "reason": "E技能法力消耗增加和R技能冷却时间延长削弱了对线和团战能力。",
+          "change_type": "nerf",
+          "strength_score": 4,
+          "tags": [
+            "坦克",
+            "团战",
+            "抗压"
+          ]
+        }
+      ],
+      "C": [],
+      "D": []
+    },
+    "meta_ecosystem": {
+      "dominant_archetypes": [
+        {
+          "type": "重装战士",
+          "champions": [
+            "暗裔剑魔 亚托克斯"
+          ],
+          "reason": "重装战士在对线坦克时有更大优势，适应分推和单带meta。"
+        }
+      ],
+      "declining_archetypes": [
+        {
+          "type": "坦克",
+          "champions": [
+            "熔岩巨兽 墨菲特"
+          ],
+          "reason": "技能耗蓝增加和冷却延长削弱了对线和团战能力。"
+        }
+      ],
+      "playstyle_trends": [
+        "重装战士在分推和单带中表现突出",
+        "坦克英雄在对抗灵活战士时处境艰难"
+      ]
+    },
+    "executive_summary": "本版本重装战士如剑魔在分推和单带中表现突出，而坦克英雄如墨菲特因技能削弱在对抗灵活战士时处境艰难。",
+    "tokens": {
+      "completion_tokens": 2557,
+      "prompt_tokens": 3279,
+      "total_tokens": 5836,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0
+      }
+    },
+    "champion_details": [
+      {
+        "champion": "暗裔剑魔 亚托克斯",
+        "tier": "A",
+        "change_summary": "被动百分比伤害提升，增强对抗坦克和高生命值英雄的能力",
+        "gameplay_impact": {
+          "laning_phase": "被动最大生命值伤害从4-8%提升到4-10%，对线期换血能力显著增强。特别是6级后，被动的百分比伤害提升让剑魔在对抗坦克英雄时更有优势。Q技能对野怪伤害增加虽然主要针对打野位，但上单剑魔在反野或清理石甲虫时也会受益。",
+          "teamfight_role": "团战中被动伤害的提升让剑魔的斩杀能力更强，特别是对抗高生命值的前排英雄。这增强了剑魔作为重装战士的持续作战能力，配合征服者符文能造成更多混合伤害。",
+          "build_adjustment": "被动魔法伤害提升可能让剑魔更倾向于混合伤害出装。可以考虑搭配黑切+死舞+斯特拉克的标准战士出装，被动百分比伤害的提升让剑魔即使不出太多攻击力装备也能造成可观伤害。"
+        },
+        "recommended_builds": [
+          {
+            "name": "标准战士流",
+            "core_items": [
+              "黑切",
+              "死舞",
+              "斯特拉克的挑战护手"
+            ],
+            "boots": "铁板靴",
+            "situational": [
+              "复活甲",
+              "水银弯刀"
+            ],
+            "reason": "被动百分比伤害的提升让剑魔即使不出太多攻击力装备也能造成可观伤害，黑切和死舞提供的生命值和减CD非常契合。",
+            "适用场景": "对阵坦克和高生命值英雄",
+            "runes": "征服者"
+          },
+          {
+            "name": "混合伤害流",
+            "core_items": [
+              "黑切",
+              "破败王者之刃",
+              "斯特拉克的挑战护手"
+            ],
+            "boots": "水银之靴",
+            "situational": [
+              "巨型九头蛇",
+              "死亡之舞"
+            ],
+            "reason": "破败王者之刃提供的攻击速度和吸血增强了持续作战能力，适合对抗高生命值目标。",
+            "适用场景": "对阵高生命值和回复能力强的敌人",
+            "runes": "征服者"
+          }
+        ]
+      },
+      {
+        "champion": "熔岩巨兽 墨菲特",
+        "tier": "B",
+        "change_summary": "E技能法力消耗增加，R技能冷却时间延长，削弱对线和团战能力",
+        "gameplay_impact": {
+          "laning_phase": "E技能法力消耗增加（50固定→50/55/60/65/70）和R技能冷却时间延长（130/105/80→130/115/100）是双重削弱。对线期需要更谨慎使用E技能清兵和换血，蓝耗管理更加重要。大招冷却延长减少了开团频率，需要更谨慎选择开团时机。",
+          "teamfight_role": "团战开团能力被削弱，大招冷却时间在中期（11级）从105秒增加到115秒，后期（16级）从80秒增加到100秒。这意味着墨菲特在关键团战中的容错率降低，如果大招使用不当，需要等待更长时间才能再次参团。",
+          "build_adjustment": "可能需要更注重法力值装备，如冰脉护手或冰霜之心。也可以考虑更早出女神泪来缓解蓝耗压力。由于大招冷却延长，可能需要考虑出一些冷却缩减装备来弥补。"
+        },
+        "recommended_builds": [
+          {
+            "name": "坦克流",
+            "core_items": [
+              "日炎圣盾",
+              "冰脉护手",
+              "冰霜之心"
+            ],
+            "boots": "水银之靴",
+            "situational": [
+              "深渊面具",
+              "兰顿之兆"
+            ],
+            "reason": "冰脉护手和冰霜之心提供的法力值和减CD可以缓解蓝耗和大招冷却延长的问题。",
+            "适用场景": "对阵物理输出为主的阵容",
+            "runes": "余震"
+          },
+          {
+            "name": "法坦流",
+            "core_items": [
+              "日炎圣盾",
+              "深渊面具",
+              "振奋铠甲"
+            ],
+            "boots": "法穿鞋",
+            "situational": [
+              "兰德里的折磨",
+              "亡者的板甲"
+            ],
+            "reason": "深渊面具提供的魔抗和法伤双重收益适合对抗法系输出。",
+            "适用场景": "对阵法术伤害为主的阵容",
+            "runes": "余震"
+          }
+        ]
+      },
+      {
+        "champion": "破败之王 佛耶戈",
+        "tier": "B",
+        "change_summary": "成长攻速和Q技能暴击伤害的提升增强了对线和团战能力",
+        "gameplay_impact": {
+          "laning_phase": "成长攻速从2.25%提升到2.75%显著增强了佛耶戈的平A手感和对线换血能力。Q技能暴击伤害修正从50%提升到60%让暴击流佛耶戈的爆发更高。这些改动让佛耶戈在对线期的持续输出和爆发能力都有所提升。",
+          "teamfight_role": "团战中攻速提升让佛耶戈能更快打出被动标记，Q技能暴击伤害提升增强了收割能力。配合被动捡魂机制，佛耶戈在团战中的滚雪球能力更强。",
+          "build_adjustment": "暴击伤害提升可能让暴击流佛耶戈重新成为可行选择。可以考虑破败+盾弓+无尽的标准暴击出装，或者继续走战士流（破败+黑切+死舞）。攻速提升也让攻速装备的收益更高。"
+        },
+        "recommended_builds": [
+          {
+            "name": "暴击流",
+            "core_items": [
+              "破败王者之刃",
+              "盾弓",
+              "无尽之刃"
+            ],
+            "boots": "狂战士胫甲",
+            "situational": [
+              "饮血剑",
+              "死亡之舞"
+            ],
+            "reason": "暴击伤害提升使得暴击流佛耶戈的爆发更高，适合快速击杀脆皮目标。",
+            "适用场景": "对阵脆皮阵容",
+            "runes": "征服者"
+          },
+          {
+            "name": "战士流",
+            "core_items": [
+              "破败王者之刃",
+              "黑切",
+              "死舞"
+            ],
+            "boots": "铁板靴",
+            "situational": [
+              "复活甲",
+              "斯特拉克的挑战护手"
+            ],
+            "reason": "增强的攻速和Q技能暴击伤害让战士流佛耶戈在持续作战中表现优异。",
+            "适用场景": "对阵混合阵容",
+            "runes": "征服者"
+          }
+        ]
+      }
+    ],
+    "counter_matrix": {
+      "暗裔剑魔 亚托克斯": {
+        "counters": [
+          {
+            "champion": "奥恩",
+            "reason": "被动百分比伤害提升对抗坦克英雄更有优势"
+          },
+          {
+            "champion": "塞恩",
+            "reason": "对抗高生命值英雄时被动提供更多伤害"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "剑姬",
+            "reason": "剑姬的破绽攻击能够有效对抗亚托克斯的治疗和输出"
+          },
+          {
+            "champion": "鳄鱼",
+            "reason": "鳄鱼的爆发能力和控制技能能够限制亚托克斯的持续输出"
+          }
+        ],
+        "changes_this_patch": [
+          "增强对抗坦克英雄（奥恩、塞恩）",
+          "增强对抗高生命值战士（盖伦、蒙多）"
+        ]
+      },
+      "熔岩巨兽 墨菲特": {
+        "counters": [
+          {
+            "champion": "剑姬",
+            "reason": "剑姬的机动性和真实伤害能够有效对抗墨菲特的护甲和控制"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "剑姬",
+            "reason": "剑姬的机动性和真实伤害能够有效对抗墨菲特的护甲和控制"
+          },
+          {
+            "champion": "青钢影",
+            "reason": "青钢影的机动性和爆发能力能够限制墨菲特的开团能力"
+          }
+        ],
+        "changes_this_patch": [
+          "削弱对抗AD战士（剑姬、青钢影）",
+          "削弱对抗分推英雄"
+        ]
+      },
+      "破败之王 佛耶戈": {
+        "counters": [
+          {
+            "champion": "脆皮战士",
+            "reason": "成长攻速和暴击伤害提升增强了对脆皮战士的爆发能力"
+          },
+          {
+            "champion": "分推英雄",
+            "reason": "增强的单挑能力让佛耶戈在对抗分推英雄时更具威胁"
+          }
+        ],
+        "countered_by": [
+          {
+            "champion": "重伤英雄",
+            "reason": "重伤效果能够有效限制佛耶戈的回复能力"
+          }
+        ],
+        "changes_this_patch": [
+          "增强对抗脆皮战士",
+          "增强对抗分推英雄"
+        ]
+      }
+    },
+    "key_highlights": [
+      {
+        "type": "champion_buff",
+        "champion": "暗裔剑魔 亚托克斯",
+        "summary": "被动百分比伤害提升，增强对抗坦克和高生命值英雄的能力",
+        "impact_level": "high"
+      },
+      {
+        "type": "champion_nerf",
+        "champion": "熔岩巨兽 墨菲特",
+        "summary": "E技能法力消耗增加，R技能冷却时间延长，削弱对线和团战能力",
+        "impact_level": "medium"
+      },
+      {
+        "type": "champion_buff",
+        "champion": "破败之王 佛耶戈",
+        "summary": "成长攻速和Q技能暴击伤害的提升增强了对线和团战能力",
+        "impact_level": "medium"
+      }
+    ]
+  },
+  "metadata": {
+    "extractor_tokens": {
+      "completion_tokens": 546,
+      "prompt_tokens": 5996,
+      "total_tokens": 6542,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 5952
+      },
+      "prompt_cache_hit_tokens": 5952,
+      "prompt_cache_miss_tokens": 44
+    },
+    "analyzer_tokens": {
+      "completion_tokens": 1498,
+      "prompt_tokens": 7579,
+      "total_tokens": 9077,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 7488
+      },
+      "prompt_cache_hit_tokens": 7488,
+      "prompt_cache_miss_tokens": 91
+    },
+    "summarizer_tokens": {
+      "step1": {
+        "completion_tokens": 541,
+        "prompt_tokens": 2323,
+        "total_tokens": 2864,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        }
+      },
+      "step2": {
+        "completion_tokens": 2557,
+        "prompt_tokens": 3279,
+        "total_tokens": 5836,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        }
+      }
+    }
+  }
+}

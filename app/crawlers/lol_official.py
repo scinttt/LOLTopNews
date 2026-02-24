@@ -33,7 +33,7 @@ class LOLOfficialCrawler(BaseCrawler):
 
         logger.info(f"LOL官网爬虫已初始化")
 
-    async def fetch_patch_notes(self, version: str = "latest") -> str:
+    async def fetch_patch_notes(self, version: str = "latest") -> tuple[str, str]:
         """
         爬取指定版本的更新公告
 
@@ -41,7 +41,7 @@ class LOLOfficialCrawler(BaseCrawler):
             version: 版本号（如 "14.24"、"26.3"）或 "latest" 表示最新版本
 
         Returns:
-            str: 更新公告的文本内容
+            tuple[str, str]: (更新公告的文本内容, 实际探测到的版本号)
 
         Raises:
             ValueError: 指定版本未找到时抛出
@@ -53,27 +53,27 @@ class LOLOfficialCrawler(BaseCrawler):
         logger.info(f"开始搜索版本 {version} 的更新公告...")
         target_url = await self._search_version_in_news_list(version)
         content = await self._fetch_url_content(target_url)
-        return content
+        return content, version.lstrip("vV")
 
-    async def fetch_latest_patch_notes(self) -> str:
+    async def fetch_latest_patch_notes(self) -> tuple[str, str]:
         """
         爬取最新版本的更新公告
 
         Returns:
-            str: 更新公告的文本内容
+            tuple[str, str]: (更新公告的文本内容, 实际探测到的版本号)
 
         Raises:
             Exception: 爬取失败时抛出
         """
         logger.info("开始爬取最新版本更新公告...")
 
-        # 1. 获取最新版本更新的URL
-        latest_url = await self._fetch_news_list()
+        # 1. 获取最新版本更新的URL和版本号
+        latest_url, version = await self._fetch_news_list()
 
         # 2. 爬取该URL的内容
         content = await self._fetch_url_content(latest_url)
 
-        return content
+        return content, version
 
     async def _search_version_in_news_list(
         self, version: str, max_pages: int = 10
@@ -146,12 +146,12 @@ class LOLOfficialCrawler(BaseCrawler):
             f"请确认版本号格式（如 '26.3'、'15.24'）是否正确"
         )
 
-    async def _fetch_news_list(self) -> str:
+    async def _fetch_news_list(self) -> tuple[str, str]:
         """
-        爬取新闻列表页，返回最新的版本更新新闻链接
+        爬取新闻列表页，返回最新的版本更新新闻链接和版本号
 
         Returns:
-            str: 最新版本更新新闻的完整URL链接，如果未找到则返回known_patch_urls中的第一个
+            tuple[str, str]: (最新版本更新新闻的完整URL链接, 版本号)
         """
 
         logger.info(f"爬取新闻列表页: {self.news_list_url}")
@@ -183,18 +183,22 @@ class LOLOfficialCrawler(BaseCrawler):
                         href = first_link.get("href", "")
                         title = first_link.get_text(strip=True)
 
+                        # 从标题提取版本号 (如 "14.24版本公告" -> "14.24")
+                        version_match = re.search(r"(\d+\.\d+)", title)
+                        detected_version = version_match.group(1) if version_match else "unknown"
+
                         # 构建完整URL
                         latest_url = f"https://lol.qq.com/{href}"
 
-                        logger.info(f"✅ 找到最新版本更新: {title}")
-                        return latest_url
+                        logger.info(f"✅ 找到最新版本更新: {title} (Version: {detected_version})")
+                        return latest_url, detected_version
 
                     # 如果没有找到任何链接，使用known_patch_urls作为后备
                     logger.warning("HTML解析未找到新闻链接，使用已知URL作为后备")
                     if self.known_patch_urls:
                         fallback_url = self.known_patch_urls[0]
                         logger.info(f"使用后备URL: {fallback_url}")
-                        return fallback_url
+                        return fallback_url, "unknown"
                     else:
                         raise ValueError("未找到版本更新链接，且没有配置后备URL")
 

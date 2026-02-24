@@ -19,6 +19,17 @@ class TestAPI(unittest.TestCase):
     def setUpClass(cls):
         cls.client = TestClient(api.app)
 
+    def setUp(self):
+        # 默认不命中缓存
+        self.cache_get_patcher = patch("api.get_cached_analysis", return_value=None)
+        self.cache_save_patcher = patch("api.save_analysis_to_cache")
+        self.cache_get_patcher.start()
+        self.cache_save_patcher.start()
+
+    def tearDown(self):
+        self.cache_get_patcher.stop()
+        self.cache_save_patcher.stop()
+
     def test_health_endpoint(self):
         response = self.client.get("/health")
         self.assertEqual(response.status_code, 200)
@@ -29,7 +40,7 @@ class TestAPI(unittest.TestCase):
         fake_result = {"version": "14.24", "top_lane_changes": []}
 
         with (
-            patch.object(api.LOLOfficialCrawler, "fetch_patch_notes", new=AsyncMock(return_value=fake_content)),
+            patch.object(api.LOLOfficialCrawler, "fetch_patch_notes", new=AsyncMock(return_value=(fake_content, "14.24"))),
             patch.object(api, "run_workflow", new=AsyncMock(return_value=fake_result)) as workflow_mock,
         ):
             response = self.client.get("/api/analyze", params={"version": "14.24"})
@@ -59,7 +70,7 @@ class TestAPI(unittest.TestCase):
         fake_result = {"version": "latest", "top_lane_changes": []}
 
         with (
-            patch.object(api.LOLOfficialCrawler, "fetch_patch_notes", new=AsyncMock(return_value="fetched content")) as fetch_mock,
+            patch.object(api.LOLOfficialCrawler, "fetch_patch_notes", new=AsyncMock(return_value=("fetched content", "latest"))) as fetch_mock,
             patch.object(api, "run_workflow", new=AsyncMock(return_value=fake_result)) as workflow_mock,
         ):
             response = self.client.post("/api/analyze", json={"version": "latest"})
