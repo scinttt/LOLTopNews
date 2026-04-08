@@ -1,28 +1,26 @@
-from typing import Annotated, Any, Dict, List, Optional, TypedDict
-
-from langgraph.graph.message import add_messages
+from typing import Any, Dict, List, Optional, TypedDict
 
 # ==================== 状态定义 ====================
 
 class WorkflowState(TypedDict):
-    """主工作流的状态 - 所有 Node 共享"""
-    # 输入
-    raw_content: str                                    # 爬取的原始内容
-    version: str                                        # 版本号
+    """Main workflow state shared across all nodes."""
+    # Input
+    raw_content: str
+    version: str
 
-    # Extractor 输出
-    top_lane_changes: Optional[List[Dict[str, Any]]]   # 上单相关变更
+    # Extractor output
+    top_lane_changes: Optional[List[Dict[str, Any]]]
 
-    # Analyzer 输出 (Day 4-5 实现)
-    impact_analyses: Optional[List[Dict[str, Any]]]    # 影响分析
+    # Analyzer output
+    impact_analyses: Optional[List[Dict[str, Any]]]
 
-    # Summarizer 输出 (Day 8 实现)
-    summary_report: Optional[Dict[str, Any]]           # 总结报告
+    # Summarizer output
+    summary_report: Optional[Dict[str, Any]]
 
-    # LangGraph 消息历史
-    messages: Annotated[list, add_messages]
+    # Messages — plain list, no add_messages reducer (saves memory)
+    messages: list
 
-    # 通用
+    # Common
     error: Optional[str]
-    metadata: Optional[Dict[str, Any]]                 # Token 使用等元数据
-    tool_call_count: int                               # 工具调用计数器（防止无限循环）
+    metadata: Optional[Dict[str, Any]]
+    tool_call_count: int

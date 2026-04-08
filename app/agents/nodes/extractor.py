@@ -149,7 +149,8 @@ async def extractor_node(state: WorkflowState) -> WorkflowState:
             **state,
             "top_lane_changes": top_lane_changes,
             "version": data.get("version", state.get("version")),
-            "messages": messages,
+            "raw_content": "",  # Free memory
+            "messages": [],     # Don't carry messages to next node
             "metadata": metadata
         }
 
