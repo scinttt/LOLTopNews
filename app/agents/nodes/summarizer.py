@@ -128,13 +128,24 @@ async def _aggregate_tier_list_and_meta(
     response = await llm.ainvoke([HumanMessage(content=prompt)])
 
     try:
-        # 解析JSON
-        result = json.loads(response.content)
+        content = response.content
+        if not isinstance(content, str):
+            content = str(content)
+        # Try direct parse, then extract JSON block
+        try:
+            result = json.loads(content)
+        except json.JSONDecodeError:
+            import re
+            match = re.search(r'\{.*\}', content, re.DOTALL)
+            if match:
+                result = json.loads(match.group())
+            else:
+                raise
         result["tokens"] = response.response_metadata.get("token_usage", {})
         return result
-    except json.JSONDecodeError as e:
-        logger.error(f"LLM did not return valid JSON despite JSON mode. Response content:\n{response.content}")
-        raise ValueError(f"Failed to decode JSON from LLM response in _aggregate_tier_list_and_meta: {e}")
+    except (json.JSONDecodeError, ValueError) as e:
+        logger.error(f"Failed to parse Summarizer Step 1 response:\n{response.content[:500]}")
+        raise ValueError(f"Failed to decode JSON in _aggregate_tier_list_and_meta: {e}")
 
 
 async def _enhance_builds_and_counters(
@@ -157,12 +168,23 @@ async def _enhance_builds_and_counters(
     response = await llm.ainvoke([HumanMessage(content=prompt)])
 
     try:
-        result = json.loads(response.content)
+        content = response.content
+        if not isinstance(content, str):
+            content = str(content)
+        try:
+            result = json.loads(content)
+        except json.JSONDecodeError:
+            import re
+            match = re.search(r'\{.*\}', content, re.DOTALL)
+            if match:
+                result = json.loads(match.group())
+            else:
+                raise
         result["tokens"] = response.response_metadata.get("token_usage", {})
         return result
-    except json.JSONDecodeError as e:
-        logger.error(f"LLM did not return valid JSON. Response content:\n{response.content}")
-        raise ValueError(f"Failed to decode JSON from LLM response in _enhance_builds_and_counters: {e}")
+    except (json.JSONDecodeError, ValueError) as e:
+        logger.error(f"Failed to parse Summarizer Step 2 response:\n{response.content[:500]}")
+        raise ValueError(f"Failed to decode JSON in _enhance_builds_and_counters: {e}")
 
 
 # ========== Prompt Templates ==========

@@ -40,12 +40,8 @@ def analyzer_llm(temperature: float = 0.7, bind_tools: bool = True):
 
 
 def summarizer_llm(temperature: float = 0.7, bind_tools: bool = False):
-    """Create LLM for the summarizer node (JSON mode)."""
-    llm = _create_llm(
-        "deepseek",
-        temperature=temperature,
-        model_kwargs={"response_format": {"type": "json_object"}},
-    )
+    """Create LLM for the summarizer node."""
+    llm = _create_llm("deepseek", temperature=temperature)
 
     if bind_tools:
         llm = llm.bind_tools([websearch])
