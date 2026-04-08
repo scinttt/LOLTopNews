@@ -70,7 +70,7 @@ async def extractor_node(state: WorkflowState) -> WorkflowState:
         # 如果messages为空，这是第一次调用，需要初始化
         if not messages:
             raw_content = state["raw_content"]
-            content = raw_content[:10000]  # 限制长度
+            content = raw_content[:4000]  # Limit to reduce token count for 256MB containers
 
             system_msg = SystemMessage(content=(
                 "You are a League of Legends top lane expert analyst.\n"

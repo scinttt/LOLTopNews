@@ -1,55 +1,20 @@
 """
-LOL Top Lane Guide - 主工作流
-一个 LangGraph，包含 3 个 Node: Extractor, Analyzer, Summarizer
-支持 WebSearch 工具调用
+LOL Top Lane Guide - Main Workflow
+Linear LangGraph pipeline: Extractor -> Analyzer -> Summarizer
 """
 import logging
-from typing import Any, Dict, Literal
+from typing import Any, Dict
 
 from agents.nodes.analyzer import analyzer_node
 from agents.nodes.extractor import extractor_node
 from agents.nodes.summarizer import summarizer_node
 from agents.state import WorkflowState
-from agents.tools import websearch
 from dotenv import load_dotenv
 from langgraph.graph import END, StateGraph
-from langgraph.prebuilt import ToolNode
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-MAX_TOOL_CALLS = 5
-
-
-# ==================== Node 2: Tool Node ====================
-
-# 使用 LangGraph 内置的 ToolNode
-tools = [websearch]
-tool_node = ToolNode(tools)
-
-
-# ==================== 条件路由 ====================
-
-def should_continue(state: WorkflowState) -> Literal["tools", "summarizer"]:
-    """决定 analyzer 是否继续调用工具还是进入 summarizer"""
-
-    messages = state["messages"]
-    last_message = messages[-1]
-
-    tool_call_count = state.get("tool_call_count", 0)
-
-    if tool_call_count >= MAX_TOOL_CALLS:
-        logger.warning(f"⚠️ 已达到最大工具调用次数 ({MAX_TOOL_CALLS})，强制进入 summarizer")
-        return "summarizer"
-
-    # 如果最后一条消息包含工具调用，进入 tool_node
-    if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
-        logger.info(f"→ 路由到: tools (Analyzer 请求调用工具，当前次数: {tool_call_count + 1}/{MAX_TOOL_CALLS})")
-        return "tools"
-
-    # 否则，进入 summarizer
-    logger.info("→ 路由到: summarizer (Analyzer 分析完成)")
-    return "summarizer"
 
 
 def build_initial_state(raw_content: str, version: str) -> WorkflowState:
@@ -67,81 +32,32 @@ def build_initial_state(raw_content: str, version: str) -> WorkflowState:
     }
 
 
-# ==================== 创建工作流 ====================
-
 def create_workflow():
     """
-    创建主工作流 (一个 Graph, 包含工具调用循环)
+    Create a linear pipeline: extractor -> analyzer -> summarizer
 
-    Returns:
-        CompiledStateGraph: 编译后的 LangGraph 工作流
-
-    流程:
-    START -> extractor -> analyzer -> [should_continue?]
-                             |            |
-                             v            v
-                          tools -----> summarizer -> END
-                             |
-                             └──> (循环回 analyzer)
+    No tool call loop — keeps memory usage low for constrained containers.
     """
-    # 创建图
     workflow = StateGraph(WorkflowState)
 
-    # 添加节点
     workflow.add_node("extractor", extractor_node)
-    workflow.add_node("tools", tool_node)             # 工具调用节点
     workflow.add_node("analyzer", analyzer_node)
     workflow.add_node("summarizer", summarizer_node)
 
-    # 定义流程
     workflow.set_entry_point("extractor")
-
-    # extractor 后直接进入 analyzer
     workflow.add_edge("extractor", "analyzer")
-
-    # analyzer 的条件路由：可能调用工具或进入 summarizer
-    workflow.add_conditional_edges(
-        "analyzer",
-        should_continue,
-        {
-            "tools": "tools",
-            "summarizer": "summarizer"
-        }
-    )
-
-    # 工具调用后循环回 analyzer
-    workflow.add_edge("tools", "analyzer")
-
-    # summarizer 结束
+    workflow.add_edge("analyzer", "summarizer")
     workflow.add_edge("summarizer", END)
 
-    # 编译
     return workflow.compile()
 
 
-# ==================== 便捷函数 ====================
-
 async def run_workflow(raw_content: str, version: str = "unknown") -> Dict[str, Any]:
-    """
-    运行完整工作流
-
-    Args:
-        raw_content: 原始公告内容
-        version: 版本号
-
-    Returns:
-        Dict: 包含所有输出的结果
-    """
-    # 创建工作流
+    """Run the full analysis pipeline."""
     graph = create_workflow()
-
-    # 初始状态
     initial_state = build_initial_state(raw_content, version)
-
-    # 执行
     result = await graph.ainvoke(initial_state)
 
-    # 检查错误
     if result.get("error"):
         raise ValueError(result["error"])
 
