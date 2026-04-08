@@ -23,6 +23,10 @@ async def summarizer_node(state: WorkflowState) -> WorkflowState:
     logger.info("Node: Summarizer - 开始生成总结报告")
     logger.info("=" * 60)
 
+    # Free message history from previous nodes to reduce memory usage
+    # Summarizer only needs top_lane_changes and impact_analyses
+    state = {**state, "messages": []}
+
     try:
         # 1. 提取输入数据
         top_lane_changes = state.get("top_lane_changes", [])

@@ -105,6 +105,9 @@ async def analyzer_node(state: WorkflowState) -> WorkflowState:
     logger.info("Node: Analyzer - 开始分析上单变更影响")
     logger.info("=" * 60)
 
+    # Free raw_content from state — Extractor already extracted what we need
+    state = {**state, "raw_content": ""}
+
     try:
         # 1. 获取 extractor 的输出
         top_lane_changes = state.get("top_lane_changes", [])
