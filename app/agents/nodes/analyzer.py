@@ -162,7 +162,7 @@ Search examples:
 
         # 4. 调用 LLM（绑定工具，允许搜索）
         # 检查是否接近工具调用上限
-        MAX_TOOL_CALLS = 10  # 与 workflow.py 中的值保持一致
+        MAX_TOOL_CALLS = 5  # Must match workflow.py
         tool_call_count = state.get("tool_call_count", 0)
         approaching_limit = tool_call_count >= MAX_TOOL_CALLS - 1  # 最后一次机会
 
@@ -181,6 +181,16 @@ Search examples:
         else:
             # 正常情况，允许调用工具
             model = analyzer_llm(temperature=0.7, bind_tools=True)
+
+        # Trim message history to stay under model context limit (~120K tokens ≈ ~360K chars)
+        MAX_CHARS = 360000
+        total_chars = sum(len(str(m.content)) for m in messages)
+        if total_chars > MAX_CHARS:
+            logger.warning(f"⚠️ Message history too large ({total_chars} chars), trimming middle messages")
+            # Keep first 2 messages (system + initial prompt) and last 2
+            trimmed = messages[:2] + messages[-2:]
+            trimmed.insert(2, HumanMessage(content="[Earlier search results trimmed to fit context limit. Please provide your final analysis based on what you have.]"))
+            messages = trimmed
 
         logger.info("调用 LLM 进行影响分析...")
         response = await model.ainvoke(messages)

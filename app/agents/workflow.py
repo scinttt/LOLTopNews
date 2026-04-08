@@ -18,7 +18,7 @@ from langgraph.prebuilt import ToolNode
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-MAX_TOOL_CALLS = 10
+MAX_TOOL_CALLS = 5
 
 
 # ==================== Node 2: Tool Node ====================
