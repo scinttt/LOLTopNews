@@ -3,7 +3,7 @@
  * 与后端 FastAPI 交互
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 export interface AnalysisResult {
   version: string;

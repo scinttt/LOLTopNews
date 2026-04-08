@@ -14,6 +14,8 @@ from agents.workflow import run_workflow
 from crawlers.lol_official import LOLOfficialCrawler
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 logging.basicConfig(level=logging.INFO)
@@ -187,17 +189,7 @@ async def _analyze(raw_content: str, version: str):
 
     return result
 
-@app.get("/")
-async def root():
-    """API 根路径"""
-    return {
-        "message": "LOL Top Lane Guide API",
-        "version": "1.0.0",
-        "endpoints": {
-            "analyze": "/api/analyze",
-            "health": "/health"
-        }
-    }
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
 
 @app.get("/health")
@@ -371,16 +363,32 @@ async def manual_check_update():
     return result
 
 
+# ==================== Frontend SPA ====================
+
+if FRONTEND_DIR.is_dir():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIR / "assets"), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """Serve frontend SPA — fallback to index.html for client-side routing."""
+        file_path = FRONTEND_DIR / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        return FileResponse(FRONTEND_DIR / "index.html")
+
+
 # ==================== 运行服务器 ====================
 
 if __name__ == "__main__":
+    import os
+
     import uvicorn
 
-    # 开发环境配置
+    port = int(os.getenv("PORT", "8000"))
     uvicorn.run(
         "api:app",
         host="0.0.0.0",
-        port=8000,
-        reload=True,  # 开发模式下自动重载
-        log_level="info"
+        port=port,
+        reload=True,
+        log_level="info",
     )
