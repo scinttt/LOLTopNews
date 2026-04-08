@@ -28,7 +28,7 @@ export interface VersionsIndex {
  * @param version 版本号，默认为 "latest"
  * @returns 分析结果
  */
-export async function analyzeVersion(version: string = 'latest'): Promise<AnalysisResult> {
+export async function analyzeVersion(version: string = 'latest'): Promise<any> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/analyze?version=${version}`);
 
@@ -36,8 +36,7 @@ export async function analyzeVersion(version: string = 'latest'): Promise<Analys
       throw new Error(`API 请求失败: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('分析版本失败:', error);
     throw error;

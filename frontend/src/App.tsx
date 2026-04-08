@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ChampionChanges from './components/ChampionChanges';
 import ImpactAnalysis from './components/ImpactAnalysis';
 import SubscribeForm from './components/SubscribeForm';
@@ -14,6 +14,8 @@ import {
   type VersionEntry,
 } from './services/api';
 
+const POLL_INTERVAL = 5000; // 5s
+
 const App: React.FC = () => {
   const [data, setData] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -21,16 +23,59 @@ const App: React.FC = () => {
   const [version, setVersion] = useState('');
   const [versions, setVersions] = useState<VersionEntry[]>([]);
   const [currentVersion, setCurrentVersion] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Refresh the version list from backend
   const refreshVersions = async () => {
     try {
       const index = await fetchVersions();
       setVersions(index.versions);
-    } catch { /* ignore */ }
+      return index;
+    } catch { return null; }
   };
 
-  // On mount: load latest cached version, or auto-analyze latest
+  // Poll for analysis completion: check if version appeared in cache
+  const startPolling = useCallback((targetVersion: string) => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    setAnalyzing(true);
+
+    pollRef.current = setInterval(async () => {
+      try {
+        const index = await fetchVersions();
+        setVersions(index.versions);
+        const found = index.versions.find(v => v.version === targetVersion);
+        if (found) {
+          // Analysis done — load result
+          const result = await fetchVersionData(targetVersion);
+          setData(result);
+          setCurrentVersion(targetVersion);
+          setVersion(targetVersion);
+          setLoading(false);
+          setAnalyzing(false);
+          if (pollRef.current) clearInterval(pollRef.current);
+          triggerBackfill();
+        }
+      } catch { /* keep polling */ }
+    }, POLL_INTERVAL);
+
+    // Stop after 5 minutes
+    setTimeout(() => {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        setAnalyzing(false);
+        setLoading(false);
+        setError('分析超时，请稍后刷新页面重试');
+      }
+    }, 300000);
+  }, []);
+
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+  }, []);
+
+  // On mount: load latest cached version, or trigger async analysis
   useEffect(() => {
     (async () => {
       try {
@@ -43,36 +88,39 @@ const App: React.FC = () => {
           setData(result);
           setCurrentVersion(index.latest);
           setVersion(index.latest);
-          // Backfill older versions in the background
+          setLoading(false);
           triggerBackfill();
         } else {
-          // No cache — auto-analyze latest version
-          const result = await analyzeVersion('latest');
-          setData(result);
-          setCurrentVersion(result.version);
-          setVersion(result.version);
-          await refreshVersions();
-          // Backfill previous versions in the background
-          triggerBackfill();
+          // No cache — trigger async analysis, then poll
+          const resp = await analyzeVersion('latest');
+          if (resp.status === 'analyzing') {
+            // Backend is working on it, poll until done
+            startPolling(resp.version);
+          } else {
+            // Got result directly (unlikely but handle it)
+            setData(resp);
+            setCurrentVersion(resp.version);
+            setVersion(resp.version);
+            setLoading(false);
+            triggerBackfill();
+          }
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load');
-      } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [startPolling]);
 
   // Periodically refresh version list while backfill runs
   useEffect(() => {
     if (!data) return;
     const interval = setInterval(refreshVersions, 15000);
-    // Stop polling after 5 minutes (backfill should be done)
     const timeout = setTimeout(() => clearInterval(interval), 300000);
     return () => { clearInterval(interval); clearTimeout(timeout); };
   }, [data]);
 
-  // Trigger a new analysis (crawl + LLM pipeline)
+  // Trigger a new analysis (async)
   const handleAnalyze = async () => {
     const trimmedVersion = version.trim() || 'latest';
     if (!isVersionInputValid(trimmedVersion)) {
@@ -83,13 +131,17 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await analyzeVersion(trimmedVersion);
-      setData(result);
-      setCurrentVersion(result.version);
-      await refreshVersions();
+      const resp = await analyzeVersion(trimmedVersion);
+      if (resp.status === 'analyzing') {
+        startPolling(resp.version);
+      } else {
+        setData(resp);
+        setCurrentVersion(resp.version);
+        await refreshVersions();
+        setLoading(false);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : '分析失败');
-    } finally {
       setLoading(false);
     }
   };
@@ -149,7 +201,7 @@ const App: React.FC = () => {
       </header>
 
       <main>
-        {loading && (
+        {(loading || analyzing) && (
           <div style={{ textAlign: 'center', padding: '2rem' }}>
             <p>正在分析最新版本，请稍候...</p>
             <p style={{ fontSize: '0.9rem', color: '#888' }}>
@@ -167,7 +219,7 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {!loading && !error && data && (
+        {!loading && !analyzing && !error && data && (
           <>
             <Summary data={data} />
             <TierList data={data} />

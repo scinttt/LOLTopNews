@@ -198,64 +198,77 @@ async def health_check():
     return {"status": "healthy"}
 
 
+_analyzing: dict[str, str] = {}  # version -> "running" | "done" | "error:<msg>"
+
+
+async def _run_analysis_bg(version: str, raw_content: str) -> None:
+    """Background task: run analysis and update status."""
+    try:
+        await _analyze(raw_content, version)
+        _analyzing[version] = "done"
+    except Exception as e:
+        logger.error(f"❌ Background analysis failed for {version}: {e}")
+        _analyzing[version] = f"error:{e}"
+
+
 @app.get("/api/analyze")
 async def analyze_version_get(
-    version: str = Query(default="latest", description="版本号，如 14.24 或 latest")
+    background_tasks: BackgroundTasks,
+    version: str = Query(default="latest", description="版本号，如 14.24 或 latest"),
 ):
-    """
-    分析指定版本的更新公告（GET 请求）
-
-    参数:
-        version: 版本号，默认为 latest（最新版本）
-
-    返回:
-        包含分析结果的 JSON 对象
-    """
+    """Trigger analysis. Returns cached result or starts background job."""
     logger.info(f"收到 GET 分析请求: version={version}")
 
     try:
         raw_content, real_version = await _fetch_raw_content(version)
-        return await _analyze(raw_content, real_version)
+
+        # Return cached result immediately
+        cached = get_cached_analysis(real_version)
+        if cached:
+            return cached
+
+        # Already running
+        if _analyzing.get(real_version) == "running":
+            return {"status": "analyzing", "version": real_version}
+
+        # Start background analysis
+        _analyzing[real_version] = "running"
+        background_tasks.add_task(_run_analysis_bg, real_version, raw_content)
+        return {"status": "analyzing", "version": real_version}
 
     except Exception as e:
         logger.error(f"❌ 分析失败: {str(e)}")
-        import traceback
-        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}")
 
 
 @app.post("/api/analyze")
-async def analyze_version_post(request: AnalysisRequest):
-    """
-    分析指定版本的更新公告（POST 请求）
-
-    请求体:
-        {
-            "version": "14.24",  // 可选，默认 latest
-            "raw_content": "..."  // 可选，提供则不爬取
-        }
-
-    返回:
-        包含分析结果的 JSON 对象
-    """
-    logger.info(f"收到 POST 分析请求: version={request.version}, has_content={bool(request.raw_content)}")
+async def analyze_version_post(
+    request: AnalysisRequest,
+    background_tasks: BackgroundTasks,
+):
+    """Trigger analysis via POST. Same async behavior as GET."""
+    logger.info(f"收到 POST 分析请求: version={request.version}")
 
     try:
         raw_content = request.raw_content
         version = request.version or "latest"
 
-        # 如果没有提供内容，则爬取
         if not raw_content:
             raw_content, version = await _fetch_raw_content(version)
-        else:
-            logger.info(f"📄 使用提供的内容: {len(raw_content)} 字符")
 
-        return await _analyze(raw_content, version)
+        cached = get_cached_analysis(version)
+        if cached:
+            return cached
+
+        if _analyzing.get(version) == "running":
+            return {"status": "analyzing", "version": version}
+
+        _analyzing[version] = "running"
+        background_tasks.add_task(_run_analysis_bg, version, raw_content)
+        return {"status": "analyzing", "version": version}
 
     except Exception as e:
         logger.error(f"❌ 分析失败: {str(e)}")
-        import traceback
-        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}")
 
 
