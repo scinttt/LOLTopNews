@@ -5,7 +5,6 @@ from unittest.mock import AsyncMock, patch
 
 from fastapi.testclient import TestClient
 
-
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 APP_DIR = os.path.join(PROJECT_ROOT, "app")
 if APP_DIR not in sys.path:
@@ -40,8 +39,13 @@ class TestAPI(unittest.TestCase):
         fake_result = {"version": "14.24", "top_lane_changes": []}
 
         with (
-            patch.object(api.LOLOfficialCrawler, "fetch_patch_notes", new=AsyncMock(return_value=(fake_content, "14.24"))),
-            patch.object(api, "run_workflow", new=AsyncMock(return_value=fake_result)) as workflow_mock,
+            patch.object(
+                api.LOLOfficialCrawler, "fetch_patch_notes",
+                new=AsyncMock(return_value=(fake_content, "14.24")),
+            ),
+            patch.object(
+                api, "run_workflow", new=AsyncMock(return_value=fake_result),
+            ) as workflow_mock,
         ):
             response = self.client.get("/api/analyze", params={"version": "14.24"})
 
@@ -70,8 +74,13 @@ class TestAPI(unittest.TestCase):
         fake_result = {"version": "latest", "top_lane_changes": []}
 
         with (
-            patch.object(api.LOLOfficialCrawler, "fetch_patch_notes", new=AsyncMock(return_value=("fetched content", "latest"))) as fetch_mock,
-            patch.object(api, "run_workflow", new=AsyncMock(return_value=fake_result)) as workflow_mock,
+            patch.object(
+                api.LOLOfficialCrawler, "fetch_patch_notes",
+                new=AsyncMock(return_value=("fetched content", "latest")),
+            ) as fetch_mock,
+            patch.object(
+                api, "run_workflow", new=AsyncMock(return_value=fake_result),
+            ) as workflow_mock,
         ):
             response = self.client.post("/api/analyze", json={"version": "latest"})
 

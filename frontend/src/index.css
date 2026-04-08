@@ -55,6 +55,50 @@ div[class*="component-"] {
   text-align: left;
 }
 
+/* VersionSelector Styles */
+.version-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0.75rem;
+}
+
+.version-selector-label {
+  color: #a09476;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.version-selector-list {
+  display: flex;
+  gap: 6px;
+}
+
+.version-selector-item {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 4px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--font-family-sans);
+  font-size: 0.85em;
+  transition: all 0.15s;
+}
+
+.version-selector-item:hover {
+  border-color: var(--accent-color-gold);
+  color: var(--header-color);
+}
+
+.version-selector-item.active {
+  background: var(--accent-color-gold);
+  color: #010a13;
+  border-color: var(--accent-color-gold);
+  font-weight: bold;
+}
+
 /* ChampionChanges Styles */
 .changes-container {
     display: grid;
@@ -192,5 +236,70 @@ div[class*="component-"] {
     padding: 10px;
   margin-top: 10px;
   font-style: italic;
+}
+
+/* Subscribe Form Styles */
+.subscribe-form {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 24px;
+  text-align: center;
+}
+
+.subscribe-title {
+  margin: 0 0 12px;
+  font-size: 1.1em;
+}
+
+.subscribe-input-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.subscribe-input {
+  padding: 8px 12px;
+  font-size: 0.95em;
+  min-width: 240px;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  background: #010a13;
+  color: var(--text-color);
+  font-family: var(--font-family-sans);
+}
+
+.subscribe-button {
+  padding: 8px 20px;
+  background: var(--accent-color-gold);
+  color: #010a13;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: var(--font-family-sans);
+}
+
+.subscribe-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.subscribe-hint {
+  margin: 0;
+  font-size: 0.85em;
+  color: #a09476;
+}
+
+.subscribe-success {
+  color: var(--accent-color-blue);
+  font-size: 0.95em;
+}
+
+.subscribe-error {
+  color: #ff7f7f;
+  font-size: 0.9em;
+  margin: 4px 0 0;
 }
 

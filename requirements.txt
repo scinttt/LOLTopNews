@@ -24,3 +24,6 @@ lxml==5.1.0
 
 # Utilities
 httpx==0.26.0
+
+# Scheduler
+apscheduler>=3.10

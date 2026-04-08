@@ -125,9 +125,9 @@ async def main():
     from dotenv import load_dotenv
     load_dotenv()
 
-    api_key = os.getenv("DEEPSEEK_API_KEY")
-    if not api_key or api_key == "your_deepseek_api_key_here":
-        print("❌ 错误: DEEPSEEK_API_KEY 未配置")
+    api_key = os.getenv("AI_BUILDER_TOKEN")
+    if not api_key:
+        print("❌ 错误: AI_BUILDER_TOKEN 未配置")
         return
 
     # 运行测试

@@ -5,7 +5,6 @@ import tempfile
 import unittest
 from unittest.mock import AsyncMock, patch
 
-
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 APP_DIR = os.path.join(PROJECT_ROOT, "app")
 if APP_DIR not in sys.path:

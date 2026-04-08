@@ -1,7 +1,9 @@
-import re
 import logging
+import re
+
 import aiohttp
 from bs4 import BeautifulSoup
+
 from .base import BaseCrawler
 
 logger = logging.getLogger(__name__)
@@ -24,14 +26,17 @@ class LOLOfficialCrawler(BaseCrawler):
 
         # 请求头配置（模拟浏览器）
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            ),
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
             "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
-        logger.info(f"LOL官网爬虫已初始化")
+        logger.info("LOL官网爬虫已初始化")
 
     async def fetch_patch_notes(self, version: str = "latest") -> tuple[str, str]:
         """
@@ -145,6 +150,46 @@ class LOLOfficialCrawler(BaseCrawler):
             f"未在新闻列表前 {max_pages} 页中找到版本 {normalised_version} 的更新公告，"
             f"请确认版本号格式（如 '26.3'、'15.24'）是否正确"
         )
+
+    async def list_recent_versions(self, count: int = 5, max_pages: int = 5) -> list[str]:
+        """
+        Scan the news list and return up to `count` recent patch version numbers.
+
+        Returns:
+            list[str]: Version strings like ["26.5", "26.4", "26.3", ...], newest first.
+        """
+        version_pattern = re.compile(r"^(\d+\.\d+)\s*版本公告")
+        found: list[str] = []
+
+        async with aiohttp.ClientSession(headers=self.headers) as session:
+            for page_number in range(1, max_pages + 1):
+                page_url = f"https://lol.qq.com/gicp/news/423/2/1334/{page_number}.html"
+                try:
+                    async with session.get(
+                        page_url, timeout=aiohttp.ClientTimeout(total=30)
+                    ) as response:
+                        if response.status == 404:
+                            break
+                        response.raise_for_status()
+                        html = await response.text(encoding="gb2312", errors="ignore")
+                except Exception:
+                    break
+
+                try:
+                    soup = BeautifulSoup(html, "lxml")
+                except Exception:
+                    soup = BeautifulSoup(html, "html.parser")
+
+                for link in soup.find_all("a", href=re.compile(r"/gicp/news/410/\d+\.html")):
+                    title = link.get_text(strip=True)
+                    m = version_pattern.match(title)
+                    if m and m.group(1) not in found:
+                        found.append(m.group(1))
+                        if len(found) >= count:
+                            return found
+
+        logger.info(f"Found {len(found)} recent versions: {found}")
+        return found
 
     async def _fetch_news_list(self) -> tuple[str, str]:
         """

@@ -2,15 +2,13 @@
 LOL Top Lane Guide - 应用入口
 分析指定版本的更新公告，生成上单位置影响报告
 """
-import asyncio
 import argparse
-import sys
-import os
+import asyncio
 import logging
-from typing import Dict, Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 
-from crawlers.lol_official import LOLOfficialCrawler
 from agents.workflow import run_workflow
+from crawlers.lol_official import LOLOfficialCrawler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -25,7 +23,9 @@ def get_change_symbol(change_type: str) -> str:
     return "🔄"
 
 
-def split_changes_by_type(changes: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
+def split_changes_by_type(
+    changes: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
     """Split extracted changes into champion/item/system groups."""
     champions = [c for c in changes if c["type"] == "champion"]
     items = [c for c in changes if c["type"] == "item"]
@@ -167,8 +167,8 @@ async def main():
         action = "读取文件" if args.file else "爬取"
         print(f"❌ {action}失败: {str(e)}")
         if not args.file:
-            print(f"\n💡 提示: 可以使用 --file 参数指定本地文件")
-            print(f"   例如: --file data/sample_patch_14.24.txt")
+            print("\n💡 提示: 可以使用 --file 参数指定本地文件")
+            print("   例如: --file data/sample_patch_14.24.txt")
         return
 
     # 2. 运行分析工作流

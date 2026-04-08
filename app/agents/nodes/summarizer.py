@@ -5,10 +5,10 @@ LOL Top Lane Guide - Summarizer Node
 import json
 import logging
 from typing import Dict, List
-from langchain_core.messages import HumanMessage
 
-from agents.state import WorkflowState
 from agents.llm import summarizer_llm
+from agents.state import WorkflowState
+from langchain_core.messages import HumanMessage
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,6 @@
-from typing import TypedDict, Optional, Dict, List, Any, Annotated
+from typing import Annotated, Any, Dict, List, Optional, TypedDict
 
 from langgraph.graph.message import add_messages
-
 
 # ==================== 状态定义 ====================
 

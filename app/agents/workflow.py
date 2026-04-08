@@ -4,18 +4,16 @@ LOL Top Lane Guide - 主工作流
 支持 WebSearch 工具调用
 """
 import logging
-from typing import Dict, Any, Literal
-from dotenv import load_dotenv
+from typing import Any, Dict, Literal
 
-from langgraph.graph import StateGraph, END
-from langgraph.prebuilt import ToolNode
-
+from agents.nodes.analyzer import analyzer_node
+from agents.nodes.extractor import extractor_node
+from agents.nodes.summarizer import summarizer_node
 from agents.state import WorkflowState
 from agents.tools import websearch
-from agents.nodes.extractor import extractor_node
-from agents.nodes.analyzer import analyzer_node
-from agents.nodes.summarizer import summarizer_node
-
+from dotenv import load_dotenv
+from langgraph.graph import END, StateGraph
+from langgraph.prebuilt import ToolNode
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
@@ -74,7 +72,7 @@ def build_initial_state(raw_content: str, version: str) -> WorkflowState:
 def create_workflow():
     """
     创建主工作流 (一个 Graph, 包含工具调用循环)
-    
+
     Returns:
         CompiledStateGraph: 编译后的 LangGraph 工作流
 

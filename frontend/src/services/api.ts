@@ -13,6 +13,16 @@ export interface AnalysisResult {
   metadata: any;
 }
 
+export interface VersionEntry {
+  version: string;
+  analyzed_at: string;
+}
+
+export interface VersionsIndex {
+  latest: string | null;
+  versions: VersionEntry[];
+}
+
 /**
  * 分析指定版本的更新公告
  * @param version 版本号，默认为 "latest"
@@ -66,6 +76,51 @@ export async function analyzeVersionPost(
     console.error('分析版本失败:', error);
     throw error;
   }
+}
+
+/**
+ * Fetch the version index (latest + history)
+ */
+export async function fetchVersions(): Promise<VersionsIndex> {
+  const response = await fetch(`${API_BASE_URL}/api/versions`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch versions: ${response.status}`);
+  }
+  return response.json();
+}
+
+/**
+ * Fetch cached analysis for a specific version
+ */
+export async function fetchVersionData(version: string): Promise<AnalysisResult> {
+  const response = await fetch(`${API_BASE_URL}/api/versions/${version}`);
+  if (!response.ok) {
+    throw new Error(`Version ${version} not found`);
+  }
+  return response.json();
+}
+
+/**
+ * Subscribe an email to patch notifications
+ */
+export async function subscribe(email: string): Promise<{ ok: boolean; email: string; action: string }> {
+  const response = await fetch(`${API_BASE_URL}/api/subscribe`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.detail || `Subscribe failed: ${response.status}`);
+  }
+  return response.json();
+}
+
+/**
+ * Trigger background backfill of recent versions
+ */
+export async function triggerBackfill(): Promise<void> {
+  await fetch(`${API_BASE_URL}/api/backfill`, { method: 'POST' });
 }
 
 /**

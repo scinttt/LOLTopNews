@@ -18,9 +18,10 @@ env/
 *.swp
 *.swo
 
-# Data (raw patches for debugging only)
-data/raw_patches/
-*.html
+# Data (runtime cache and raw patches)
+data/
+app/data/cache/
+app/data/subscribers.json
 
 # Database
 *.db

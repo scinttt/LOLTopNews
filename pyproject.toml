@@ -1,0 +1,42 @@
+[project]
+name = "loltopnews"
+version = "1.0.0"
+description = "AI-powered League of Legends top lane patch analysis"
+readme = "Readme.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv==1.0.0",
+    "fastapi==0.104.1",
+    "uvicorn[standard]==0.24.0",
+    "langgraph>=0.0.20",
+    "langchain>=0.1.0",
+    "langchain-openai>=0.0.5",
+    "langchain-community>=0.0.16",
+    "openai==1.10.0",
+    "tavily-python>=0.3.0",
+    "aiohttp==3.9.1",
+    "beautifulsoup4==4.12.3",
+    "lxml==5.1.0",
+    "httpx==0.26.0",
+    "apscheduler>=3.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["app"]
+asyncio_mode = "auto"

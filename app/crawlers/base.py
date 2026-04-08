@@ -2,10 +2,10 @@
 爬虫基类
 提供重试机制、异常处理、日志记录等通用功能
 """
-import logging
 import asyncio
-from typing import Optional, Callable, Any
+import logging
 from functools import wraps
+from typing import Any, Callable, Optional
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -71,7 +71,7 @@ class BaseCrawler:
                     logger.info(f"等待 {wait_time} 秒后重试...")
                     await asyncio.sleep(wait_time)
                 else:
-                    logger.error(f"所有重试均失败，放弃爬取")
+                    logger.error("所有重试均失败，放弃爬取")
 
         # 所有重试都失败，抛出异常
         raise last_exception

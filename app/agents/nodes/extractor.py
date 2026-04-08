@@ -2,10 +2,9 @@ import json
 import logging
 import re
 
-from langchain_core.messages import HumanMessage, SystemMessage
-
-from agents.state import WorkflowState
 from agents.llm import extractor_llm
+from agents.state import WorkflowState
+from langchain_core.messages import HumanMessage, SystemMessage
 
 logger = logging.getLogger(__name__)
 
@@ -73,10 +72,13 @@ async def extractor_node(state: WorkflowState) -> WorkflowState:
             raw_content = state["raw_content"]
             content = raw_content[:10000]  # 限制长度
 
-            system_msg = SystemMessage(content="""You are a League of Legends top lane expert analyst.
-If the patch notes lack detail about a champion's abilities or mechanics, use the websearch tool to find more information.
-
-Example: If you see "剑姬 Q技能调整" but no specifics, search for "剑姬 Q技能 破绽机制".""")
+            system_msg = SystemMessage(content=(
+                "You are a League of Legends top lane expert analyst.\n"
+                "If the patch notes lack detail about a champion's abilities or mechanics, "
+                "use the websearch tool to find more information.\n\n"
+                "Example: If you see \"剑姬 Q技能调整\" but no specifics, "
+                "search for \"剑姬 Q技能 破绽机制\"."
+            ))
 
             prompt = EXTRACTOR_PROMPT_TEMPLATE.format(content=content)
             user_msg = HumanMessage(content=prompt)

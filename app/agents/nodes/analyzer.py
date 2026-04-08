@@ -6,10 +6,9 @@ import json
 import logging
 import re
 
-from langchain_core.messages import HumanMessage, SystemMessage
-
-from agents.state import WorkflowState
 from agents.llm import analyzer_llm
+from agents.state import WorkflowState
+from langchain_core.messages import HumanMessage, SystemMessage
 
 logger = logging.getLogger(__name__)
 
@@ -248,7 +247,7 @@ Search examples:
             "meta_overview": meta_overview,
             "analysis_timestamp": state.get("version", "unknown")
         }]
-        
+
         logger.info(f"✅ Analyzer 完成: {impact_analyses_list}")
 
         return {
