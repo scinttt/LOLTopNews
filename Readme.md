@@ -1,10 +1,17 @@
 # LOL Top Lane Guide
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white" alt="Python 3.12+">
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white" alt="FastAPI Backend">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19">
+  <img src="https://img.shields.io/badge/License-MIT-F7DF1E?logo=open-source-initiative&logoColor=black" alt="MIT License">
+</p>
+
 Author: Ren
 
-## Quick Start
+## English
 
-### English
+### Quick Start
 
 ```bash
 python -m venv .venv
@@ -23,7 +30,19 @@ cd frontend
 VITE_API_URL=http://localhost:8000 npm run dev
 ```
 
-### 中文
+### What It Does
+
+This project turns League of Legends patch notes into a top-lane focused summary.
+
+- Analyze the latest patch or a specific patch version.
+- Pull out the champion and system changes that actually matter for top lane.
+- Generate an AI summary so players can quickly understand the new meta.
+- Support fast switching between cached historical versions.
+- Support email subscription for patch update notifications.
+
+## 中文
+
+### 快速开始
 
 ```bash
 python -m venv .venv
@@ -42,19 +61,7 @@ cd frontend
 VITE_API_URL=http://localhost:8000 npm run dev
 ```
 
-## Feature
-
-### English
-
-This project turns League of Legends patch notes into a top-lane focused summary.
-
-- Analyze the latest patch or a specific patch version.
-- Pull out the champion and system changes that actually matter for top lane.
-- Generate an AI summary so players can quickly understand the new meta.
-- Support fast switching between cached historical versions.
-- Support email subscription for patch update notifications.
-
-### 中文
+### 人话功能介绍
 
 这个项目会把《英雄联盟》版本更新说明整理成更适合上单玩家看的版本。
 
