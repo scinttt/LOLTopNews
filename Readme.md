@@ -42,7 +42,7 @@ cd frontend
 VITE_API_URL=http://localhost:8000 npm run dev
 ```
 
-## What It Does / 人话功能介绍
+## Feature
 
 ### English
 
